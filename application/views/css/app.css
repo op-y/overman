@@ -1,0 +1,39 @@
+body {
+    padding-top: 50px;
+}
+
+.app-container-gap {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.app-form {
+    padding: 50px 100px 50px 100px;
+}
+
+.app-half-form {
+    padding: 10px 30px 10px 30px;
+}
+
+.app-op-area {
+    text-align: center;
+}
+
+.app-btn {
+    margin: 10px;
+}
+
+.app-title {
+    font-size: 150%;
+}
+
+.app-item {
+    font-size: 120%;
+    padding-top: 5px;
+}
+
+.img-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
