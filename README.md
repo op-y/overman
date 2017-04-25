@@ -8,7 +8,7 @@ overman 是用PHP写的，主要使用一些比较成熟(老)的框架和工具�
 - [Smarty](http://www.smarty.net/)
 - [JQuery](http://jquery.com/)
 - [Bootstrap](http://getbootstrap.com/)，[中文链接](http://www.bootcss.com/)
-持续补充...
+- 持续补充...
 
 使用方法:
 项目比较简单，部署好LAMP(或者LNMP)环境(包括必要的依赖库)，将项目文件放置于WebRoot目录下即可访问。
