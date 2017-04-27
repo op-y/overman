@@ -38,7 +38,7 @@
 |
 */
 
-/* Spi123 route configuration */
+/* billboard  */
 $route['billboard'] = 'billboard/index';
 
 /* System route */
