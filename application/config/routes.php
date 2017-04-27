@@ -38,8 +38,14 @@
 |
 */
 
-/* Spi123 route configuration */
+/* billboard */
 $route['billboard'] = 'billboard/index';
+
+/* idc */
+$route['idc'] = 'idc/index';
+$route['ajaxGetIdcs'] = 'idc/ajaxGetIdcs';
+
+/* API */
 
 /* System route */
 $route['default_controller'] = 'billboard/index';

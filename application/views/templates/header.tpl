@@ -33,6 +33,12 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                  <li><a href="/index.php/billboard">Billboard</a></li>
+                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">资产管理<b class="caret"></b></a>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="about">
+                         <li role="presentation"><a href="">IDC</a></li>
+                         <li role="presentation"><a href="">机器管理</a></li>
+                     </ul>
+                 </li>
                  <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">关于<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
                          <li role="presentation"><a href="">值班人</a></li>

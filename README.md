@@ -8,6 +8,7 @@ overman 是用PHP写的，主要使用一些比较成熟(老)的框架和工具�
 - [Smarty](http://www.smarty.net/)
 - [JQuery](http://jquery.com/)
 - [Bootstrap](http://getbootstrap.com/)，[中文链接](http://www.bootcss.com/)
+- [DataTables](https://www.datatables.net/)，[中文链接](http://www.datatables.club/)
 - 持续补充...
 
 使用方法:
