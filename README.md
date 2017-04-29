@@ -4,10 +4,10 @@ overman 顾名思义就是想将这个平台建设成一个运维大管家，尽
 overman 的一小部分设计和想法源自在某厂时的经历，此外大部分来自目前工作需求。
 
 overman 是用PHP写的，主要使用一些比较成熟(老)的框架和工具，包括但是不限于:
-- [CodeIgniter](http://www.codeigniter.com/)，[中文链接](https://codeigniter.org.cn/)
-- [Smarty](http://www.smarty.net/)
-- [JQuery](http://jquery.com/)
-- [Bootstrap](http://getbootstrap.com/)，[中文链接](http://www.bootcss.com/)
+- [CodeIgniter 3.1.4](http://www.codeigniter.com/)，[中文链接](https://codeigniter.org.cn/)
+- [Smarty 2.1](http://www.smarty.net/)
+- [JQuery 1.11.1](http://jquery.com/)
+- [Bootstrap 3](http://getbootstrap.com/)，[中文链接](http://www.bootcss.com/)
 - [DataTables](https://www.datatables.net/)，[中文链接](http://www.datatables.club/)
 - 持续补充...
 
