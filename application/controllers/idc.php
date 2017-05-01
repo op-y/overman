@@ -31,4 +31,41 @@ class Idc extends MY_Controller {
         echo $json;
     }
 
+    public function ajaxAddIdc() {
+        $name          = $this->input->post('name');
+        $address       = $this->input->post('address');
+        $administrator = $this->input->post('administrator');
+        $tel           = $this->input->post('tel');
+        $message = $this->idc->addIdc($name, $address, $administrator, $tel);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
+
+    public function ajaxUpdateIdc() {
+        $id            = $this->input->post('id');
+        $name          = $this->input->post('name');
+        $address       = $this->input->post('address');
+        $administrator = $this->input->post('administrator');
+        $tel           = $this->input->post('tel');
+        $message = $this->idc->updateIdc($id, $name, $address, $administrator, $tel);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
+
+    public function ajaxDeleteIdc() {
+        $id = $this->input->post('id');
+        $message = $this->idc->deleteIdc($id);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
+
 }

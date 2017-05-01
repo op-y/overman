@@ -54,10 +54,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['billboard'] = 'billboard/index';
 
 /* idc */
-$route['idc'] = 'idc/index';
-$route['ajaxGetIdcs'] = 'idc/ajaxGetIdcs';
+$route['idc']           = 'idc/index';
+$route['ajaxGetIdcs']   = 'idc/ajaxGetIdcs';
+$route['ajaxAddIdc']    = 'idc/ajaxAddIdc';
+$route['ajaxUpdateIdc'] = 'idc/ajaxUpdateIdc';
+$route['ajaxDeleteIdc'] = 'idc/ajaxDeleteIdc';
 
 /* API */
+$route['api/idc']['GET']    = 'api/idc/getIdcs';
+$route['api/idc']['POST']   = 'api/idc/addIdcs';
+$route['api/idc']['PUT']    = 'api/idc/updateIdcs';
+$route['api/idc']['DELETE'] = 'api/idc/deleteIdcs';
 
 /* System route */
 $route['default_controller'] = 'billboard/index';
