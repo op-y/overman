@@ -60,10 +60,21 @@ $route['ajaxAddIdc']    = 'idc/ajaxAddIdc';
 $route['ajaxUpdateIdc'] = 'idc/ajaxUpdateIdc';
 $route['ajaxDeleteIdc'] = 'idc/ajaxDeleteIdc';
 
+/* host */
+$route['host']            = 'host/index';
+$route['ajaxGetHosts']    = 'host/ajaxGetHosts';
+$route['ajaxAddHost']     = 'host/ajaxAddHost';
+$route['ajaxUpdateHost']  = 'host/ajaxUpdateHost';
+$route['ajaxDeleteHost']  = 'host/ajaxDeleteHost';
+
 /* API */
 $route['api/idc']['GET']    = 'api/idc/getIdcs';
 $route['api/idc']['POST']   = 'api/idc/addIdcs';
 $route['api/idc/(:num)']['DELETE'] = 'api/idc/deleteIdc/$1';
+
+$route['api/host']['GET']           = 'api/host/getHosts';
+$route['api/host']['POST']          = 'api/host/addHosts';
+$route['api/host/(:num)']['DELETE'] = 'api/host/deleteHost/$1';
 
 /* System route */
 $route['default_controller'] = 'billboard/index';
