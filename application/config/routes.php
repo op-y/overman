@@ -63,8 +63,7 @@ $route['ajaxDeleteIdc'] = 'idc/ajaxDeleteIdc';
 /* API */
 $route['api/idc']['GET']    = 'api/idc/getIdcs';
 $route['api/idc']['POST']   = 'api/idc/addIdcs';
-$route['api/idc']['PUT']    = 'api/idc/updateIdcs';
-$route['api/idc']['DELETE'] = 'api/idc/deleteIdcs';
+$route['api/idc/(:num)']['DELETE'] = 'api/idc/deleteIdc/$1';
 
 /* System route */
 $route['default_controller'] = 'billboard/index';

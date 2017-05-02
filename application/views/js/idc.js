@@ -104,7 +104,7 @@ function add() {
         complete: function(){
             $("#idc_modal").modal("toggle");
             clear();
-            dts.fnDraw();
+            flush();
         },
         success: function(data){
             alert("添加成功!");
@@ -131,7 +131,7 @@ function update() {
         complete: function(){
             $("#idc_modal").modal("toggle");
             clear();
-            dts.fnDraw();
+            flush();
         },
         success: function(data){
             alert("更新成功!");
@@ -151,7 +151,7 @@ function del(idcId) {
         beforeSend:function(){
         },
         complete: function(){
-            dts.fnDraw();
+            flush();
         },
         success: function(data){
             alert("删除成功!");
@@ -166,3 +166,7 @@ $("#idc_modalBtn_cancel").click(function(){
     clear();
     $("#idc_modal").modal("toggle");
 });
+
+function flush() {
+    window.location.reload()
+}

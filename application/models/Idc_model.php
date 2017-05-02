@@ -31,6 +31,14 @@ class Idc_model extends CI_Model {
         return $this->db->insert('idc', $data);
     }
 
+    public function addIdcs($data) {
+        try {
+            return $this->db->insert_batch('idc', $data);
+        } catch(Exception $e) {
+            return $e;
+        }
+    }
+
     public function updateIdc($id, $name, $address, $administrator, $tel) {
         $data = array(
             'name' => $name,
@@ -46,5 +54,4 @@ class Idc_model extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->delete('idc');
     }
-
 }
