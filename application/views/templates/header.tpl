@@ -42,7 +42,7 @@
                  <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">资产管理<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
                          <li role="presentation"><a href="/index.php/idc">IDC信息</a></li>
-                         <li role="presentation"><a href="">机器信息</a></li>
+                         <li role="presentation"><a href="/index.php/host">机器信息</a></li>
                      </ul>
                  </li>
             </ul>

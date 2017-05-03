@@ -41,6 +41,7 @@ var dts = $('#hosts_table').dataTable({
     ],
     "columnDefs": [{
          "targets" : 9,
+         "data" : null,
          "render" : function(data, type, row) {
              var hostId = data.id;
              var hostName = data.hostname;
@@ -52,7 +53,7 @@ var dts = $('#hosts_table').dataTable({
              var hostSSD = data.ssd;
              var hostRAID = data.raid;
              var hostNIC = data.nic;
-             var html = "<a href='javascript:void(0);' onclick='showUpdate("+hostId+",\""+hostName+"\",\""+hostIP+"\",\""+hostIdc+"\",\""+hostCPU+"\")' class='btn btn-warning btn-xs btn-del'>修改</a>";
+             var html = "<a href='javascript:void(0);' onclick='showUpdate("+hostId+",\""+hostName+"\",\""+hostIP+"\","+hostIdc+",\""+hostCPU+"\",\""+hostMemory+"\",\""+hostDisk+"\",\""+hostSSD+"\",\""+hostRAID+"\",\""+hostNIC+"\")' class='btn btn-warning btn-xs btn-del'>修改</a>";
              html += "&nbsp;";
              html += "<a href='javascript:void(0);' onclick='del("+hostId+")' class='btn btn-danger btn-xs'>删除</a>";
              return html;
@@ -61,28 +62,24 @@ var dts = $('#hosts_table').dataTable({
     order: [1, 'asc'],
 });
 
-$.ajax({ 
-    type:"GET",
-    url:"./ajaxGetIdcs", 
-    context: document.body, 
-    datatype: "json",
-    beforeSend:function(){
-    },
-    complete: function(){
-    },
-    success: function(data){
-        alert(data)
-    },
-    error: function(){
-        alert("AJAX错误!");
-    }         
+$.getJSON("./ajaxGetIdcs",function(result){
+    var selector=$('<select class="form-control" id="host_modalField_idc"></select>');
+    $.each(result.data, function(i, field){
+        selector.append('<option value="'+field.id+'">'+field.name+'</option>');
+    });
+    $("#host_modalField_idcLabel").append(selector);
+    var firstValue=$("#host_modalField_idc option:first").val();
+    $("#host_modalField_idc").val(firstValue);
 });
 
 function clear() {
     $("#host_modalField_id").val("");
     $("#host_modalField_name").val("localhost");
     $("#host_modalField_ip").val("127.0.0.1");
-    $("#host_modalField_idc").val("");
+
+    var firstValue=$("#host_modalField_idc option:first").val();
+    $("#host_modalField_idc").val(firstValue);
+
     $("#host_modalField_cpu").val("");
     $("#host_modalField_memory").val("");
     $("#host_modalField_disk").val("");
@@ -131,7 +128,7 @@ $("#host_modalBtn_commit").click(function(){
 function add() {
     var valueHostname = $("#host_modalField_hostname").val();
     var valueIP = $("#host_modalField_ip").val();
-    var valueIDC = $("#host_modalField_idc option:selected").val();
+    var valueIDC = $("#host_modalField_idc").val();
     var valueCPU =$("#host_modalField_cpu").val();
     var valueMemory =$("#host_modalField_memory").val();
     var valueDisk =$("#host_modalField_disk").val();
@@ -164,7 +161,7 @@ function update() {
     var valueId = $("#host_modalField_id").val();
     var valueHostname = $("#host_modalField_hostname").val();
     var valueIP = $("#host_modalField_ip").val();
-    var valueIDC = $("#host_modalField_idc option:selected").val();
+    var valueIDC = $("#host_modalField_idc").val();
     var valueCPU =$("#host_modalField_cpu").val();
     var valueMemory =$("#host_modalField_memory").val();
     var valueDisk =$("#host_modalField_disk").val();

@@ -30,4 +30,53 @@ class Host extends MY_Controller {
         $json = json_encode($result);
         echo $json;
     }
+
+    public function ajaxAddHost() {
+        $hostname = $this->input->post('hostname');
+        $ip       = $this->input->post('ip');
+        $idc      = $this->input->post('idc');
+        $cpu      = $this->input->post('cpu');
+        $memory   = $this->input->post('memory');
+        $disk     = $this->input->post('disk');
+        $ssd      = $this->input->post('ssd');
+        $raid     = $this->input->post('raid');
+        $nic      = $this->input->post('nic');
+
+        $message = $this->host->addHost($hostname, $ip, $idc, $cpu, $memory, $disk, $ssd, $raid, $nic);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
+
+    public function ajaxUpdateHost() {
+        $id       = $this->input->post('id');
+        $hostname = $this->input->post('hostname');
+        $ip       = $this->input->post('ip');
+        $idc      = $this->input->post('idc');
+        $cpu      = $this->input->post('cpu');
+        $memory   = $this->input->post('memory');
+        $disk     = $this->input->post('disk');
+        $ssd      = $this->input->post('ssd');
+        $raid     = $this->input->post('raid');
+        $nic      = $this->input->post('nic');
+
+        $message = $this->host->updateHost($id, $hostname, $ip, $idc, $cpu, $memory, $disk, $ssd, $raid, $nic);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
+
+    public function ajaxDeleteHost() {
+        $id = $this->input->post('id');
+        $message = $this->host->deleteHost($id);
+        $result = array(
+            "message"=>$message,
+        );
+        $json = json_encode($result);
+        echo $json;
+    }
 }

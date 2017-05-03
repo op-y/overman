@@ -21,4 +21,48 @@ class Host_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
+
+    public function addHost($hostname, $ip, $idc, $cpu, $memory, $disk, $ssd, $raid, $nic) {
+        $data = array(
+            'hostname'=>$hostname,
+            'ip'=>$ip,
+            'idc'=>$idc,
+            'cpu'=>$cpu,
+            'memory'=>$memory,
+            'disk'=>$disk,
+            'ssd'=>$ssd,
+            'raid'=>$raid,
+            'nic'=>$nic,
+        );
+        return $this->db->insert('host', $data);
+    }
+
+    public function addHosts($data) {
+        try {
+            return $this->db->insert_batch('host', $data);
+        } catch(Exception $e) {
+            return $e;
+        }
+    }
+
+    public function updateHost($id, $hostname, $ip, $idc, $cpu, $memory, $disk, $ssd, $raid, $nic) {
+        $data = array(
+            'hostname'=>$hostname,
+            'ip'=>$ip,
+            'idc'=>$idc,
+            'cpu'=>$cpu,
+            'memory'=>$cpu,
+            'disk'=>$disk,
+            'ssd'=>$ssd,
+            'raid'=>$raid,
+            'nic'=>$nic,
+        );
+        $this->db->where('id', $id);
+        return $this->db->update('host', $data);
+    }
+
+    public function deleteHost($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete('host');
+    }
 }

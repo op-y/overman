@@ -45,14 +45,7 @@
                         <input type="text" class="form-control" id="host_modalField_ip" placeholder="127.0.0.1">
                     </div>
                     <div class="form-group">
-                        <label for="host_modalField_idc">IDC:</label>
-                        <select class="form-control" id="host_modalField_idc">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+                        <label id="host_modalField_idcLabel" for="host_modalField_idc">IDC:</label>
                     </div>
                     <div class="form-group">
                         <label for="host_modalField_cpu">CPU:</label>
