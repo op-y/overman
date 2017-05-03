@@ -61,20 +61,47 @@ var dts = $('#hosts_table').dataTable({
     order: [1, 'asc'],
 });
 
+$.ajax({ 
+    type:"GET",
+    url:"./ajaxGetIdcs", 
+    context: document.body, 
+    datatype: "json",
+    beforeSend:function(){
+    },
+    complete: function(){
+    },
+    success: function(data){
+        alert(data)
+    },
+    error: function(){
+        alert("AJAX错误!");
+    }         
+});
+
 function clear() {
-    $("#idc_modalField_id").val("");
-    $("#idc_modalField_name").val("");
-    $("#idc_modalField_address").val("");
-    $("#idc_modalField_administrator").val("");
-    $("#idc_modalField_tel").val("");
+    $("#host_modalField_id").val("");
+    $("#host_modalField_name").val("localhost");
+    $("#host_modalField_ip").val("127.0.0.1");
+    $("#host_modalField_idc").val("");
+    $("#host_modalField_cpu").val("");
+    $("#host_modalField_memory").val("");
+    $("#host_modalField_disk").val("");
+    $("#host_modalField_ssd").val("");
+    $("#host_modalField_raid").val("");
+    $("#host_modalField_nic").val("");
 };
 
-function fill(id, name, address, administrator, tel) {
-    $("#idc_modalField_id").val(id);
-    $("#idc_modalField_name").val(name);
-    $("#idc_modalField_address").val(address);
-    $("#idc_modalField_administrator").val(administrator);
-    $("#idc_modalField_tel").val(tel);
+function fill(id, hostname, ip, idc, cpu, memory, disk, ssd, raid, nic) {
+    $("#host_modalField_id").val(id);
+    $("#host_modalField_hostname").val(hostname);
+    $("#host_modalField_ip").val(ip);
+    $("#host_modalField_idc").val(idc);
+    $("#host_modalField_cpu").val(cpu);
+    $("#host_modalField_memory").val(memory);
+    $("#host_modalField_disk").val(disk);
+    $("#host_modalField_ssd").val(ssd);
+    $("#host_modalField_raid").val(raid);
+    $("#host_modalField_nic").val(nic);
 };
 
 $("#host_btn_new").click(function(){
@@ -82,10 +109,15 @@ $("#host_btn_new").click(function(){
     $("#host_modal").modal("toggle");
 });
 
-function showUpdate(id, name, address, administrator, tel){
-    fill(id, name, address, administrator, tel);
-    $("#idc_modal").modal("toggle");
+function showUpdate(id, hostname, ip, idc, cpu, memory, disk, ssd, raid, nic){
+    fill(id, hostname, ip, idc, cpu, memory, disk, ssd, raid, nic);
+    $("#host_modal").modal("toggle");
 }
+
+$("#host_modalBtn_cancel").click(function(){
+    clear();
+    $("#host_modal").modal("toggle");
+});
 
 $("#host_modalBtn_commit").click(function(){
     var valueId = $("#host_modalField_id").val();
@@ -97,20 +129,25 @@ $("#host_modalBtn_commit").click(function(){
 });
 
 function add() {
-    var valueName = $("#idc_modalField_name").val();
-    var valueAddress = $("#idc_modalField_address").val();
-    var valueAdministrator = $("#idc_modalField_administrator").val();
-    var valueTel =$("#idc_modalField_tel").val();
+    var valueHostname = $("#host_modalField_hostname").val();
+    var valueIP = $("#host_modalField_ip").val();
+    var valueIDC = $("#host_modalField_idc option:selected").val();
+    var valueCPU =$("#host_modalField_cpu").val();
+    var valueMemory =$("#host_modalField_memory").val();
+    var valueDisk =$("#host_modalField_disk").val();
+    var valueSSD =$("#host_modalField_ssd").val();
+    var valueRAID =$("#host_modalField_raid").val();
+    var valueNIC =$("#host_modalField_nic").val();
     $.ajax({ 
         type:"POST",
-        url:"./ajaxAddIdc", 
+        url:"./ajaxAddHost", 
         context: document.body, 
-        data:{name:valueName, address:valueAddress, administrator:valueAdministrator, tel:valueTel},
-        datatype: "json",//"xml", "html", "script", "json", "jsonp", "text".
+        data:{hostname:valueHostname, ip:valueIP, idc:valueIDC, cpu:valueCPU, memory:valueMemory, disk:valueDisk, ssd:valueSSD, raid:valueRAID, nic:valueNIC},
+        datatype: "json",
         beforeSend:function(){
         },
         complete: function(){
-            $("#idc_modal").modal("toggle");
+            $("#host_modal").modal("toggle");
             clear();
             flush();
         },
@@ -124,20 +161,25 @@ function add() {
 }
 
 function update() {
-    var valueId = $("#idc_modalField_id").val();
-    var valueName = $("#idc_modalField_name").val();
-    var valueAddress = $("#idc_modalField_address").val();
-    var valueAdministrator = $("#idc_modalField_administrator").val();
-    var valueTel =$("#idc_modalField_tel").val();
+    var valueId = $("#host_modalField_id").val();
+    var valueHostname = $("#host_modalField_hostname").val();
+    var valueIP = $("#host_modalField_ip").val();
+    var valueIDC = $("#host_modalField_idc option:selected").val();
+    var valueCPU =$("#host_modalField_cpu").val();
+    var valueMemory =$("#host_modalField_memory").val();
+    var valueDisk =$("#host_modalField_disk").val();
+    var valueSSD =$("#host_modalField_ssd").val();
+    var valueRAID =$("#host_modalField_raid").val();
+    var valueNIC =$("#host_modalField_nic").val();
     $.ajax({ 
         type:"POST",
-        url:"./ajaxUpdateIdc", 
-        data:{id:valueId, name:valueName, address:valueAddress, administrator:valueAdministrator, tel:valueTel},
+        url:"./ajaxUpdateHost", 
+        data:{id:valueId, hostname:valueHostname, ip:valueIP, idc:valueIDC, cpu:valueCPU, memory:valueMemory, disk:valueDisk, ssd:valueSSD, raid:valueRAID, nic:valueNIC},
         datatype: "json",
         beforeSend:function(){
         },
         complete: function(){
-            $("#idc_modal").modal("toggle");
+            $("#host_modal").modal("toggle");
             clear();
             flush();
         },
@@ -150,11 +192,11 @@ function update() {
     });
 }
 
-function del(idcId) {
+function del(hostId) {
     $.ajax({ 
         type:"POST",
-        url:"./ajaxDeleteIdc", 
-        data:{id:idcId},
+        url:"./ajaxDeleteHost", 
+        data:{id:hostId},
         datatype: "json",
         beforeSend:function(){
         },
@@ -169,11 +211,6 @@ function del(idcId) {
         }         
     });
 }
-
-$("#host_modalBtn_cancel").click(function(){
-    clear();
-    $("#host_modal").modal("toggle");
-});
 
 function flush() {
     window.location.reload()

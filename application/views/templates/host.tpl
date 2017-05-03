@@ -38,11 +38,11 @@
                     </div>
                     <div class="form-group">
                         <label for="host_modalField_hostname">机器名:</label>
-                        <input type="text" class="form-control" id="host_modalField_name" placeholder="localhost">
+                        <input type="text" class="form-control" id="host_modalField_hostname" placeholder="localhost">
                     </div>
                     <div class="form-group">
                         <label for="host_modalField_ip">IP:</label>
-                        <input type="text" class="form-control" id="host_modalField_address" placeholder="127.0.0.1">
+                        <input type="text" class="form-control" id="host_modalField_ip" placeholder="127.0.0.1">
                     </div>
                     <div class="form-group">
                         <label for="host_modalField_idc">IDC:</label>
