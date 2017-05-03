@@ -51,7 +51,7 @@ class Host_model extends CI_Model {
             'ip'=>$ip,
             'idc'=>$idc,
             'cpu'=>$cpu,
-            'memory'=>$cpu,
+            'memory'=>$memory,
             'disk'=>$disk,
             'ssd'=>$ssd,
             'raid'=>$raid,
