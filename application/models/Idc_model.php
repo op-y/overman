@@ -2,7 +2,7 @@
 
 /**
  *  model class about idc table
- *  @author yezhiqin@outlook.com
+ *  @author ye.zhiqin@outlook.com
  */
 class Idc_model extends CI_Model {
 

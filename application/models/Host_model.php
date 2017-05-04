@@ -2,7 +2,7 @@
 
 /**
  *  model class about host table
- *  @author yezhiqin@outlook.com
+ *  @author ye.zhiqin@outlook.com
  */
 class Host_model extends CI_Model {
 

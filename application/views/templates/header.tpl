@@ -13,6 +13,10 @@
 
 <!-- Bootstrap core CSS -->
 <link href="/application/views/css/bootstrap.min.css" rel="stylesheet">
+<!-- bootstrap dataTables -->
+<link href="/application/views/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<!-- bootstrap calendar -->
+<link href="/application/views/css/calendar.min.css" rel="stylesheet">
 <!-- My Style -->
 <link href="/application/views/css/app.css" rel="stylesheet">
 
@@ -28,15 +32,15 @@
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">SRE</a>
+            <a class="navbar-brand" href="/index.php">SRE</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                  <li><a href="/index.php/billboard">Billboard</a></li>
                  <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">运维信息<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
-                         <li role="presentation"><a href="">值班人</a></li>
-                         <li role="presentation"><a href="">运维组</a></li>
+                         <li role="presentation"><a href="/index.php/event">计划任务</a></li>
+                         <li role="presentation"><a href="/index.php/team">团队&轮值</a></li>
                      </ul>
                  </li>
                  <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">资产管理<b class="caret"></b></a>

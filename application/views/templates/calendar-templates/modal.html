@@ -1,0 +1,20 @@
+<% 	event.date_start = new Date(parseInt(event.start));
+	event.date_end = new Date(parseInt(event.end)); %>
+<div id = "event-meta" class="">
+    <h1><%= event.title %></h1>
+    <br />
+    <span>开始时间: 
+        <%= event.date_start.getFullYear() %>-<%= event.date_start.getMonth()+1 %>-<%= event.date_start.getDate() %>&nbsp;
+        <%= event.date_start.getHours() %>:<%= event.date_start.getMinutes() %>
+        <i class="glyphicon glyphicon-time"></i>
+    </span>
+    <br />
+    <span>结束时间: 
+        <%= event.date_end.getFullYear() %>-<%= event.date_end.getMonth()+1 %>-<%= event.date_end.getDate() %>&nbsp;
+        <%= event.date_end.getHours() %>:<%= event.date_end.getMinutes() %>
+        <i class="glyphicon glyphicon-time"></i></span>
+    <br />
+    <div style = "margin: 10px 0">
+        <a href = "<%= event.url %>" target="_blank" class = "btn btn-primary"><i class = "glyphicon glyphicon-info-sign"></i>更多信息</a>
+    </div>
+</div>
