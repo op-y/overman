@@ -54,11 +54,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['billboard'] = 'billboard/index';
 
 /* info */
-$route['team']          = 'info/team';
-$route['ajaxGetRota']   = 'info/ajaxGetRota';
-$route['event']         = 'info/event';
-$route['ajaxGetEvents'] = 'info/ajaxGetEvents';
-$route['ajaxAddEvent']  = 'info/ajaxAddEvent';
+$route['team']           = 'info/team';
+$route['ajaxGetRota']    = 'info/ajaxGetRota';
+$route['ajaxChangeDuty'] = 'info/ajaxChangeDuty';
+$route['event']          = 'info/event';
+$route['ajaxGetEvents']  = 'info/ajaxGetEvents';
+$route['ajaxAddEvent']   = 'info/ajaxAddEvent';
 
 /* idc */
 $route['idc']           = 'idc/index';

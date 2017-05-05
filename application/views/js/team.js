@@ -41,15 +41,43 @@ $('.btn-group button[data-calendar-view]').each(function() {
 
 $("#duty_btn_update").click(function(){
     $("#duty-modal").modal("toggle");
+    clear();
 });
 
 $("#duty_modalBtn_cancel").click(function(){
     $("#duty-modal").modal("toggle");
+    clear();
 });
 
 $("#duty_modalBtn_commit").click(function(){
-    $("#duty-modal").modal("toggle");
+    var valueDate = $("#duty_modalField_date").val();
+    var valueOP = $("#duty_modalField_op").val();
+    $.ajax({ 
+        type:"POST",
+        url:"./ajaxChangeDuty", 
+        context: document.body, 
+        data:{dutyDate:valueDate, op:valueOP},
+        datatype: "json",
+        beforeSend:function(){
+        },
+        complete: function(){
+            $("#duty-modal").modal("toggle");
+            clear();
+            flush();
+        },
+        success: function(data){
+            alert("修改成功!");
+        },
+        error: function(){
+            alert("AJAX错误!");
+        }         
+    });
 });
+
+function clear() {
+    $("#duty_modalField_date").val("2017-05-04");
+    $("#duty_modalField_op").val("yezhiqin");
+};
 
 function flush() {
     window.location.reload()
