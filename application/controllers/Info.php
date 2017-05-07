@@ -57,7 +57,8 @@ class Info extends MY_Controller {
                 $date_now = new DateTime(date("Y-m-d",strtotime($diff,time())));
                 $date_interval = $date_now->diff($date_base);
                 $interval = $date_interval->format("%d") + 1;
-                $idx = (floor($interval/7) * 2 + (6==($interval%7)?1:0) + $pioneer)%$len - 1;
+                $ordinal = floor($interval/7) * 2 + (6==($interval%7)?1:0) + $pioneer;
+                $idx = (0==($ordinal%$len)?($len-1):($ordinal%$len - 1));
 
                 $name = $data['sre']['rota']['weekend'][$idx];
                 $op = $data['sre']['members'][$name]['display'];
