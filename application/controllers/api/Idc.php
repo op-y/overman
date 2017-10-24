@@ -1,24 +1,34 @@
 <?php
+
 /**
+ *  A Controller class, process IDC API related route.
+ *
  *  @author ye.zhiqin@outlook.com
  */
-class Idc extends MY_Controller {
-
+class Idc extends MY_Controller
+{
     /**
-     *  The class constructor
+     * Load model: idc
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('idc_model', 'idc');
     }
 
-    public function getIdcs() {
+    /**
+     * API: GET /index.php/api/idc
+     *
+     * @return json
+     */
+    public function getIdcs()
+    {
         try {
-            $message = $idcs = $this->idc->getIdcs();
+            $idcs = $this->idc->getIdcs();
             $cnt = count($idcs);
             $result = array(
                 "status"=>"success",
-                "message"=>$message,
+                "message"=>"get IDC info done",
                 "count"=>$cnt,
                 "data"=>$idcs,
             );
@@ -37,9 +47,15 @@ class Idc extends MY_Controller {
         }
     }
 
-    public function addIdcs() {
+    /**
+     * API: POST /index.php/api/idc
+     *
+     * @return json
+     */
+    public function addIdcs()
+    {
         $idcs = $this->input->post('idcs');
-        if($idcs == "" || is_null($idcs)) {
+        if ($idcs == "" || is_null($idcs)) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -65,7 +81,7 @@ class Idc extends MY_Controller {
                 $json = json_encode($result);
                 echo $json;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -81,7 +97,7 @@ class Idc extends MY_Controller {
             $cnt = count($idcArray);
 
             $message = $this->idc->addIdcs($idcArray);
-            if($message instanceof Exception) {
+            if ($message instanceof Exception) {
                 throw $message;
             }
 
@@ -93,7 +109,7 @@ class Idc extends MY_Controller {
             );
             $json = json_encode($result);
             echo $json;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -106,8 +122,14 @@ class Idc extends MY_Controller {
         }
     }
 
-    public function deleteIdc($id) {
-        if($id == "" || is_null($id)) {
+    /**
+     * API: DELETE /index.php/api/idc
+     *
+     * @return json
+     */
+    public function deleteIdc($id)
+    {
+        if ($id == "" || is_null($id)) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -123,7 +145,7 @@ class Idc extends MY_Controller {
         try {
             $cnt = 1;
             $message = $this->idc->deleteIdc($id);
-            if($message instanceof Exception) {
+            if ($message instanceof Exception) {
                 throw $message;
             }
 
@@ -135,7 +157,7 @@ class Idc extends MY_Controller {
             );
             $json = json_encode($result);
             echo $json;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -148,3 +170,4 @@ class Idc extends MY_Controller {
         }
     }
 }
+

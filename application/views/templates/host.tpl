@@ -6,7 +6,7 @@
     </button>
 </div>
 <br />
-<div class="container">
+<div class="container col-sm-12 col-md-12 col-lg-12">
     <table id="hosts_table" class="table table-striped table-hover datatable">
         <thead>
         <tr>
@@ -19,6 +19,9 @@
             <th>SSD</th>
             <th>RAID</th>
             <th>网卡</th>
+            <th>操作系统</th>
+            <th>内核</th>
+            <th>机架位</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -72,6 +75,18 @@
                         <label for="host_modalField_nic">网卡:</label>
                         <input type="text" class="form-control" id="host_modalField_nic" placeholder="NIC">
                     </div>
+                    <div class="form-group">
+                        <label for="host_modalField_os">操作系统:</label>
+                        <input type="text" class="form-control" id="host_modalField_os" placeholder="OS">
+                    </div>
+                    <div class="form-group">
+                        <label for="host_modalField_kernel">内核:</label>
+                        <input type="text" class="form-control" id="host_modalField_kernel" placeholder="Kernel">
+                    </div>
+                    <div class="form-group">
+                        <label for="host_modalField_rack">机架位:</label>
+                        <input type="text" class="form-control" id="host_modalField_rack" placeholder="Rack">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -84,4 +99,4 @@
 
 <script src="/application/views/js/jquery.dataTables.min.js"></script>
 <script src="/application/views/js/dataTables.bootstrap.min.js"></script>
-<script src="/application/views/js/host.js"></script>
+<script src="/application/views/js/app/host.js"></script>

@@ -1,19 +1,32 @@
 <?php
 
 /**
- *  model class about duty table
+ *  A Model class: operate duty table.
+ *
  *  @author ye.zhiqin@outlook.com
  */
-class Duty_model extends CI_Model {
+class Duty_model extends CI_Model
+{
 
     /**
-     *  The class constructor
+     *  Load database: default
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->load->database();
     }
 
-    public function getWeekDuty($monday, $sunday) {
+    /**
+     * SQL:
+     *    SELECT team, duty_date, op
+     *    FROM duty
+     *    WHERE duty_date>=$monday
+     *    AND duty_date<=$sunday
+     *
+     * @return array
+     */
+    public function getWeekDuty($monday, $sunday)
+    {
         $this->db->select('team, duty_date, op');
         $this->db->from('duty');
         $this->db->where('duty_date >=',$monday);
@@ -22,11 +35,28 @@ class Duty_model extends CI_Model {
         return $query->result_array();
     }
 
-    public function changeDuty($team, $duty_date, $op) {
+    /**
+     * SQL:
+     *    SELECT * FROM duty
+     *    WHERE team=$team
+     *    AND duty_date=$duty_date
+     *
+     *    INSERT INTO duty(team, duty_date, op)
+     *    VALUES($team, $duty_date, $op)
+     *
+     *    UPDATE duty
+     *    SET op=$op
+     *    WHERE team=$team
+     *    AND duty_date=$duty_date
+     *
+     * @return integer
+     */
+    public function changeDuty($team, $duty_date, $op)
+    {
         $this->db->where('team',$team);
         $this->db->where('duty_date',$duty_date);
         $num = $this->db->get('duty')->num_rows();
-        if(0 == $num) {
+        if (0 == $num) {
             $data = array(
                 'team'=>$team,
                 'duty_date'=>$duty_date,
@@ -41,3 +71,4 @@ class Duty_model extends CI_Model {
         }
     }
 }
+

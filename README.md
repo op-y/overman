@@ -9,8 +9,14 @@ overman 是用PHP写的，主要使用一些比较成熟(老)的框架和工具�
 - [JQuery 1.11.1](http://jquery.com/)
 - [Bootstrap 3](http://getbootstrap.com/)，[中文链接](http://www.bootcss.com/)
 - [DataTables](https://www.datatables.net/)，[中文链接](http://www.datatables.club/)
-- [Bootstrap-Calendar](https://github.com/Serhioromano/bootstrap-calendar)
+- [Bootstrap Calendar](https://github.com/Serhioromano/bootstrap-calendar)
+- [Bootstrap Timeline](http://codepen.io/munkhbayar/pen/Boqzc)
+- [zTree](http://www.treejs.cn/v3/main.php#_zTreeInfo)
 - 持续补充...
 
 使用方法:
-项目比较简单，部署好LAMP(或者LNMP)环境(包括必要的依赖库)，将项目文件放置于WebRoot目录下即可访问。
+- 部署好LAMP(或者LNMP)环境(包括必要的依赖库)
+- 安装Redis, 也可以修改配置不使用Redis
+- 将项目目录指定为vhost的根目录
+- mv application/config.dev application/config
+- 修改相应配置文件

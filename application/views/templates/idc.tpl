@@ -6,11 +6,12 @@
     </button>
 </div>
 <br />
-<div class="container">
+<div class="container col-sm-12 col-md-12 col-lg-12">
     <table id="idcs_table" class="table table-striped table-hover datatable">
         <thead>
         <tr>
             <th>IDC名称</th>
+            <th>IDC代码</th>
             <th>地址</th>
             <th>联系人</th>
             <th>联系电话</th>
@@ -37,6 +38,10 @@
                         <input type="text" class="form-control" id="idc_modalField_name" placeholder="IDC Name">
                     </div>
                     <div class="form-group">
+                        <label for="idc_modalField_code">IDC代码:</label>
+                        <input type="text" class="form-control" id="idc_modalField_code" placeholder="IDC Name">
+                    </div>
+                    <div class="form-group">
                         <label for="idc_modalField_address">IDC地址:</label>
                         <input type="text" class="form-control" id="idc_modalField_address" placeholder="IDC Address">
                     </div>
@@ -45,7 +50,7 @@
                         <input type="text" class="form-control" id="idc_modalField_administrator" placeholder="联系人">
                     </div>
                     <div class="form-group">
-                        <label for="idc_modalField_tel">联系人:</label>
+                        <label for="idc_modalField_tel">联系电话:</label>
                         <input type="text" class="form-control" id="idc_modalField_tel" placeholder="联系电话">
                     </div>
                 </form>
@@ -60,4 +65,4 @@
 
 <script src="/application/views/js/jquery.dataTables.min.js"></script>
 <script src="/application/views/js/dataTables.bootstrap.min.js"></script>
-<script src="/application/views/js/idc.js"></script>
+<script src="/application/views/js/app/idc.js"></script>

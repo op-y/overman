@@ -93,4 +93,4 @@
 <script src="/application/views/js/calendar.min.js"></script>
 <script src="/application/views/js/underscore-min.js"></script>
 <script src="/application/views/js/calendar-language/zh-CN.js"></script>
-<script src="/application/views/js/event.js"></script>
+<script src="/application/views/js/app/event.js"></script>

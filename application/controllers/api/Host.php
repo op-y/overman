@@ -1,18 +1,25 @@
 <?php
+
 /**
+ *  A Controller class, process host API related route.
+ *
  *  @author ye.zhiqin@outlook.com
  */
-class Host extends MY_Controller {
-
-    /**
-     *  The class constructor
-     */
-    public function __construct() {
+class Host extends MY_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('host_model', 'host');
     }
 
-    public function getHosts() {
+    /**
+     * API: GET /index.php/api/host
+     *
+     * @return json
+     */
+    public function getHosts()
+    {
         try {
             $hosts = $this->host->getHosts();
             $cnt = count($hosts);
@@ -24,7 +31,7 @@ class Host extends MY_Controller {
             );
             $json = json_encode($result);
             echo $json;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -37,9 +44,15 @@ class Host extends MY_Controller {
         }
     }
 
-    public function addHosts() {
+    /**
+     * API: POST /index.php/api/host
+     *
+     * @return json
+     */
+    public function addHosts()
+    {
         $hosts = $this->input->post('hosts');
-        if($hosts == "" || is_null($hosts)) {
+        if ($hosts == "" || is_null($hosts)) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -65,7 +78,7 @@ class Host extends MY_Controller {
                 $json = json_encode($result);
                 echo $json;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -80,7 +93,7 @@ class Host extends MY_Controller {
         try {
             $cnt = count($hostArray);
             $message = $this->host->addHosts($hostArray);
-            if($message instanceof Exception) {
+            if ($message instanceof Exception) {
                 throw $message;
             }
 
@@ -92,7 +105,7 @@ class Host extends MY_Controller {
             );
             $json = json_encode($result);
             echo $json;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -105,8 +118,14 @@ class Host extends MY_Controller {
         }
     }
 
-    public function deleteHost($id) {
-        if($id == "" || is_null($id)) {
+    /**
+     * API: DELETE /index.php/api/host
+     *
+     * @return json
+     */
+    public function deleteHost($id)
+    {
+        if ($id == "" || is_null($id)) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -122,7 +141,7 @@ class Host extends MY_Controller {
         try {
             $cnt = 1;
             $message = $this->host->deleteHost($id);
-            if($message instanceof Exception) {
+            if ($message instanceof Exception) {
                 throw $message;
             }
 
@@ -134,7 +153,7 @@ class Host extends MY_Controller {
             );
             $json = json_encode($result);
             echo $json;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $cnt = 0;
             $result = array(
                 "status"=>"failure",
@@ -147,3 +166,4 @@ class Host extends MY_Controller {
         }
     }
 }
+

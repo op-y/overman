@@ -1,27 +1,45 @@
 <?php
 
 /**
- *  model class about event table
+ *  A Model class: operate event table.
+ *
  *  @author ye.zhiqin@outlook.com
  */
-class Event_model extends CI_Model {
+class Event_model extends CI_Model
+{
 
     /**
-     *  The class constructor
+     * Load database: default
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->load->database();
     }
 
-    public function getEvents() {
-        // we may limit the result in a certain period
+    /**
+     * SQL:
+     *    SELECT id, title, url, class, start, end
+     *    FROM event
+     *
+     * @return array
+     */
+    public function getEvents()
+    {
         $this->db->select('id, title, url, class, start, end');
         $this->db->from('event');
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function addEvent($title, $url, $kind, $start, $end) {
+    /**
+     * SQL:
+     *    INSERT INTO event(title, url, class, start, end)
+     *    VALUES($title, $url, $kind, $start, $end)
+     *
+     * @return integer
+     */
+    public function addEvent($title, $url, $kind, $start, $end)
+    {
         $data = array(
             'title'=>$title,
             'url'=>$url,
@@ -32,3 +50,4 @@ class Event_model extends CI_Model {
         return $this->db->insert('event', $data);
     }
 }
+

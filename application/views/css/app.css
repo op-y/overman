@@ -32,8 +32,41 @@ body {
     padding-top: 5px;
 }
 
+.img-rounded {
+    width: 64px;
+    height: 64px;
+}
+
 .img-circle {
     width: 28px;
     height: 28px;
     border-radius: 50%;
+}
+
+.profile-box {
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: grey;
+    border-radius: 5%;
+}
+
+.sidebar {
+    margin-top: 10px;
+    text-align: left;
+    border-width: 0 2px 0 0;
+    border-style:solid;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.ztree {
+}
+
+.content {
+    margin-top: 10px;
+    padding: 0 15px 0 15px;
+    overflow-y: auto;
+    overflow-x: auto;
 }

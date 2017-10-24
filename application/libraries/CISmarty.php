@@ -1,10 +1,25 @@
-<?php 
-if(!defined('BASEPATH')) exit('No direct script asscess allowed'); 
-require_once( APPPATH . 'libraries/Smarty/Smarty.class.php' ); 
+<?php if (!defined('BASEPATH')) exit('No direct script asscess allowed'); 
 
-class CISmarty extends Smarty { 
+require_once(APPPATH.'libraries/Smarty/Smarty.class.php'); 
+
+/**
+ * Custom library class
+ *
+ * This class help to integrate and configurate Smarty.
+ *
+ * @author ye.zhiqin@outlook.com
+ */
+class CISmarty extends Smarty
+{ 
     protected $ci; 
-    public function  __construct(){
+
+    /**
+     * @member ci
+     *
+     * Configurate Smarty.
+     */
+    public function  __construct()
+    {
         parent::__construct();
         $this->ci = & get_instance(); 
         $this->ci->load->config('smarty');
@@ -16,3 +31,4 @@ class CISmarty extends Smarty {
         $this->cache_lifetime = $this->ci->config->item('lefttime'); 
     } 
 }
+

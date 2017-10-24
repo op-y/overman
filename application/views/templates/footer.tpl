@@ -1,6 +1,6 @@
 {* Smarty Footer *}
 </div>
-</div>
+<!-- end of content -->
 
 </body>
 </html>
