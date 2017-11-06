@@ -22,7 +22,6 @@ class Ab_model extends CI_Model
      *
      * @return object array
      */
-    public function getHosts()
     public function getGroups($groupIDs)
     {
         $this->db->select('groupID, groupName');
