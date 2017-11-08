@@ -55,22 +55,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="detailModalLabel"><span id="detailModalTitleName"></span>小流量集团列表</h4>
-            </div>
-            <div id="detailModalBody" class="modal-body">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="detailModalBtnOK">知道了</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 </div>
 
 <script src="/application/views/js/app/ab.js"></script>

@@ -39,9 +39,20 @@ class Ab extends MY_Controller
             array_push($abTest, $test);
         }
 
-        $this->assign('abTest',$abTest);
+        $this->assign('abTest', $abTest);
         $this->display('header.tpl');
         $this->display('ab.tpl');
+        $this->display('footer.tpl');
+    }
+
+    /**
+     * Render /index.php/abGroups/(:any)
+     */
+    public function groups($key)
+    {
+        $this->assign('key', $key);
+        $this->display('header.tpl');
+        $this->display('abdetail.tpl');
         $this->display('footer.tpl');
     }
 }

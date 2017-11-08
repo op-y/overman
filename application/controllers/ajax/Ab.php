@@ -72,42 +72,64 @@ class Ab extends MY_Controller
     public function ajaxGetTestGroups()
     {
         $key = $this->input->post('key');
+        $draw = $this->input->post('draw');
+        $start = $this->input->post('start');
+        $length = $this->input->post('length');
+        $searchValue = $this->input->post('search[value]');
 
+        // select one page
         $this->config->load('app_ab');
         $conf =  $this->config->item('ab');
 
         $redis = new Redis();
         $redis->connect($conf['redis']['ip'], $conf['redis']['port']);
 
+        $recordsTotal = 0;
+        $recordsFiltered = 0;
+        $groups = array();
+        $value = array();
+        $ids = array();
+
         foreach ($conf['items'] as $itemkey => $item) {
             if ($key == $itemkey) {
                 $value = $redis->sMembers($item['key']);
 
-                if (0 != count($value)) {
-                    $groups = $this->ab->getGroups($value);
+                if ($searchValue != null && $searchValue != '') {
+                    foreach ($value as $id) {
+                        $pos = strpos($id, $searchValue, 0);
+                        if ($pos === 0) {
+                            array_push($ids, $id);
+                        }
+                    }
                 } else {
-                    $groups = null;
+                    $ids = $value;
                 }
 
-                $info = array(
-                    'ids'=>$value,
-                    'name'=>$item['name'],
-                    'groups'=>$groups,
-                );
-                $json = json_encode($info);
-                echo $json;
-                return;
+                if (0 != count($ids)) {
+                    sort($ids);
+                    $idCnt = count($ids);
+                    $currentIds = array_slice($ids, $start, $length);
+
+                    $groups = $this->ab->getGroups($currentIds);
+                    $recordsTotal = $idCnt;
+                    $recordsFiltered = $idCnt;
+                } else {
+                    $groups = $ids;
+                    $recordsTotal = 0;
+                    $recordsFiltered = 0;
+                }
             }
         }
 
-        $info = array(
-            'ids'=>null,
-            'name'=>null,
-            'groups'=>null,
-        );
-        $json = json_encode($info);
+        // response data
+        $result = array(
+            "draw"=>$draw,
+            "recordsTotal"=>$recordsTotal,
+            "recordsFiltered"=>$recordsTotal,
+            "data"=>$groups,
+        );  
+        $json = json_encode($result);
         echo $json;
-        return;
     }
 }
 

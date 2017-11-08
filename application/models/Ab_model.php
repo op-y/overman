@@ -25,9 +25,10 @@ class Ab_model extends CI_Model
     public function getGroups($groupIDs)
     {
         $this->db->select('groupID, groupName');
+        $this->db->distinct();
         $this->db->from('tbl_data_shop_info');
         $this->db->where_in('groupID', $groupIDs);
-        $this->db->distinct();
+        $this->db->order_by('groupID', 'ASC');
         $query = $this->db->get();
         return $query->result();
     }

@@ -65,56 +65,7 @@ function fill(groupID, groupInfo) {
     }
 }
 
-$("#detailModalBtnOK").click(function(){
-    $("#detailModal").modal("toggle");
-});
-
 function show(itemkey) {
-    $.ajax({ 
-        type:"POST",
-        url:"./ajaxGetTestGroups", 
-        data:{key:itemkey},
-        datatype: "json",
-        beforeSend:function(){
-            $("#detailModalTitleName").text("");
-            $('#detailModalBody').empty();
-        },
-        complete: function(){
-            $("#detailModal").modal("toggle");
-        },
-        success: function(data){
-            info = $.parseJSON(data);
-            list(info);
-        },
-        error: function(){
-            alert("AJAX错误!");
-        }         
-    });
-}
-
-function list(info) {
-    if (null == info.name) {
-        var para=$('<p>没有该项小流量测试!</p>');
-        $("#detailModalBody").append(para);
-    } else if (null == info.groups || 0 == info.groups.length) {
-        $("#detailModalTitleName").text(info.name);
-
-        var para=$('<p>没有集团命中该项小流量测试</p>');
-        $("#detailModalBody").append(para);
-    } else {
-        $("#detailModalTitleName").text(info.name);
-
-        var table=$('<table class="table table-striped table-hover"></table>');
-        $.each(info.groups, function(i, group) {
-            var tr = $('<tr></tr>');
-            var tdID = $('<td>'+group.groupID+'</td>');
-            var tdName = $('<td>'+group.groupName+'</td>');
-
-            tr.append(tdID);
-            tr.append(tdName);
-            table.append(tr);
-        });
-
-        $("#detailModalBody").append(table);
-    }
+    var url = "/index.php/abGroups/" + itemkey;
+    $(location).attr('href', url);
 }
