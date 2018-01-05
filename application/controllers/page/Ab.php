@@ -46,6 +46,33 @@ class Ab extends MY_Controller
     }
 
     /**
+     * Render /index.php/abOp
+     */
+    public function ops()
+    {
+        $this->config->load('app_ab');
+        $conf =  $this->config->item('ab');
+
+        $redisConf = $conf['redis'];
+        $redisList = array(
+            "redis"=>$redisConf['ip'].":".$redisConf['port'],
+        );
+
+        $redisKeys = array();
+        foreach ($conf['items'] as $itemkey => $item) {
+            $key = $item['name'];
+            $value = $item['key'];
+            $redisKeys[$key]=$value;
+        }
+
+        $this->assign('redisList', $redisList);
+        $this->assign('redisKeys', $redisKeys);
+        $this->display('header.tpl');
+        $this->display('abOp.tpl');
+        $this->display('footer.tpl');
+    }
+
+    /**
      * Render /index.php/abGroups/(:any)
      */
     public function groups($key)

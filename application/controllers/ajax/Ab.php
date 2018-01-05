@@ -131,5 +131,104 @@ class Ab extends MY_Controller
         $json = json_encode($result);
         echo $json;
     }
+
+    /**
+     * Process AJAX request: POST /index.php/ajaxDoOp
+     *
+     * @return json
+     */
+    public function ajaxDoABOp()
+    {
+        $this->load->library('session');
+        if ($this->session->has_userdata('username') 
+            && $this->session->has_userdata('logged_in')
+            && TRUE == $this->session->userdata('logged_in')) {
+            
+            if ("dangersheng" == $this->session->userdata('username') || "yezhiqin" == $this->session->userdata('username')) {
+                $redisInstance  = $this->input->post('redis');
+                $redisKey       = $this->input->post('key');
+                $redisOpType    = $this->input->post('opType');
+                $redisSeparator = $this->input->post('separator');
+                $redisIds       = $this->input->post('ids');
+
+                $separator = " ";
+                switch($redisSeparator) {
+                case "comma":
+                    $separator = ",";
+                    break;
+                case "space":
+                    $separator = " ";
+                    break;
+                case "lf":
+                    $separator = "\n";
+                    break;
+                default:
+                    break;
+                }
+
+                $endpoint = explode(":", $redisInstance);
+                $redis = new Redis();
+                $redis->connect($endpoint[0], $endpoint[1]);
+
+                switch ($redisOpType) {
+                case "add":
+                    $value = 0;
+                    $ids = explode($separator, $redisIds);
+                    foreach ($ids as $id) {
+                        if (trim($id) != "") {
+                            $count = $redis->sAdd($redisKey, trim($id));
+                            $value += $count;
+                        }
+                    }
+                    break;
+                case "remove":
+                    $value = 0;
+                    $ids = explode($separator, $redisIds);
+                    foreach ($ids as $id) {
+                        if (trim($id) != "") {
+                            $count = $redis->sRem($redisKey, trim($id));
+                            $value += $count;
+                        }
+                    }
+                    break;
+                case "comfirmOne":
+                    $value = false;
+                    if (trim($redisIds) != "") {
+                        $value = $redis->sIsMember($redisKey, $redisIds);
+                    }
+                    break;
+                case "queryCount":
+                    $value = $redis->sCard($redisKey);
+                    break;
+                case "queryAll":
+                    $value = $redis->sMembers($redisKey);
+                    break;
+                default:
+                    break;
+                }
+
+                $result = array(
+                    "code"=>200,
+                    "message"=>$value,
+                );
+                $json = json_encode($result);
+                echo $json;
+            } else {
+                $result = array(
+                    "code"=>500,
+                    "message"=>"对不起,请联系二哥!",
+                );
+                $json = json_encode($result);
+                echo $json;
+            }
+        } else {
+            $result = array(
+                "code"=>500,
+                "message"=>"请先登录!",
+            );
+            $json = json_encode($result);
+            echo $json;
+        }
+    }
 }
 

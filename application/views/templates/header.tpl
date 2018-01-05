@@ -43,15 +43,20 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                  <li><a href="/index.php/app123">App123</a></li>
-                 <li><a href="/index.php/ab">小流量</a></li>
+                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="ABTest">小流量<b class="caret"></b></a>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="about">
+                         <li role="presentation"><a href="/index.php/ab">小流量信息</a></li>
+                         <li role="presentation"><a href="/index.php/abOp">小流量操作</a></li>
+                     </ul>
+                 </li>
                  <li><a href="/index.php/logfile">日志文件</a></li>
-                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">资产管理<b class="caret"></b></a>
+                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="rms">资产管理<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
                          <li role="presentation"><a href="/index.php/idc">IDC信息</a></li>
                          <li role="presentation"><a href="/index.php/host">机器信息</a></li>
                      </ul>
                  </li>
-                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">服务管理<b class="caret"></b></a>
+                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="noah">服务管理<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
                          <li role="presentation"><a href="/index.php/service">服务管理(试用)</a></li>
                          <li class="divider"></li>
@@ -60,7 +65,7 @@
                          <!--<li role="presentation"><a href="/index.php/serviceDeployment">上线模板</a></li>-->
                      </ul>
                  </li>
-                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">运维信息<b class="caret"></b></a>
+                 <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="info">运维信息<b class="caret"></b></a>
                      <ul class="dropdown-menu" role="menu" aria-labelledby="about">
                          <li role="presentation"><a href="/index.php/event">计划任务</a></li>
                          <li role="presentation"><a href="/index.php/team">团队&轮值</a></li>
@@ -70,7 +75,7 @@
             <div id="userMenu" class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                       <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="about">
+                       <a href="" data-toggle="dropdown" class="dropdown-toggle" role="button" id="aboutMe">
                            <span><img alt="image" class="img-circle" src="/application/views/image/icon-hualala.png"><span>
                        </a>
                        <ul class="dropdown-menu" role="menu" aria-labelledby="about">

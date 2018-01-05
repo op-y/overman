@@ -32,13 +32,23 @@ class Logfile_model extends CI_Model
     {
         $this->db->select('id, shopid, deviceid, applicationname, timestamp, filename, storage, fileinfo');
         $this->db->from('file');
+
+        $conditions = explode(",", $searchValue);
+        if (count($conditions) == 2) {
+            $this->db->like('shopid', $conditions[0]);
+            $this->db->like('timestamp', $conditions[1]);
+            return $this->db->count_all_results();
+        }
+        
         if ($searchValue != '') {
             $this->db->like('shopid', $searchValue);
             $this->db->or_like('deviceid', $searchValue);
             $this->db->or_like('applicationname', $searchValue);
             $this->db->or_like('timestamp', $searchValue);
             $this->db->or_like('filename', $searchValue);
+            return $this->db->count_all_results();
         }
+
         return $this->db->count_all_results();
     }
 
@@ -61,13 +71,31 @@ class Logfile_model extends CI_Model
     {
         $this->db->select('id, shopid, deviceid, applicationname, timestamp, filename, storage, fileinfo');
         $this->db->from('file');
+
+        $conditions = explode(",", $searchValue);
+        if (count($conditions) == 2) {
+            $this->db->like('shopid', $conditions[0]);
+            $this->db->like('timestamp', $conditions[1]);
+
+            $this->db->order_by('id', 'DESC');
+            $this->db->limit($limit, $start);
+            $query = $this->db->get();
+            return $query->result();
+        }
+        
         if ($searchValue != '') {
             $this->db->like('shopid', $searchValue);
             $this->db->or_like('deviceid', $searchValue);
             $this->db->or_like('applicationname', $searchValue);
             $this->db->or_like('timestamp', $searchValue);
             $this->db->or_like('filename', $searchValue);
+
+            $this->db->order_by('id', 'DESC');
+            $this->db->limit($limit, $start);
+            $query = $this->db->get();
+            return $query->result();
         }
+
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit, $start);
         $query = $this->db->get();
