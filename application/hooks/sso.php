@@ -47,10 +47,6 @@ class SSO
             return;
         }
 
-        if (strpos($uri, "ab") === 0) {
-            return;
-        }
-
         if (strpos($uri, "ajax") === 0) {
             return;
         }

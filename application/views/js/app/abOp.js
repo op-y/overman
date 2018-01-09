@@ -18,8 +18,14 @@ $("#abOpOK").click(function(){
         success: function(data){
             stat = $.parseJSON(data);
             $("#msgModalBody").empty();
-            var para=$('<p>状态码: '+stat.code +'</p><p>返回信息: '+stat.message+'</p>');
+            var para=$('<p>状态码: '+stat.code +'</p><p>返回信息:</p>');
             $("#msgModalBody").append(para);
+            var idstring = String(stat.message);
+            var ids = idstring.split(",");
+            for(id in ids) {
+                var para=$('<p>'+ ids[id] +'</p>');
+                $("#msgModalBody").append(para);
+            }
             $("#msgModal").modal("toggle");
         },
         error: function(){
