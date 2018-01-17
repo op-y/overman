@@ -8,6 +8,7 @@
                 <th>ID</th>
                 <th>ShopID</th>
                 <th>DeviceID</th>
+                <th>SaaS Version</th>
                 <th>App Name</th>
                 <th>Timestamp</th>
                 <th>File Name</th>

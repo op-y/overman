@@ -30,7 +30,7 @@ class Logfile_model extends CI_Model
      */
     public function getLogfilesTotal($searchValue='')
     {
-        $this->db->select('id, shopid, deviceid, applicationname, timestamp, filename, storage, fileinfo');
+        $this->db->select('id, shopid, deviceid, versaas, applicationname, timestamp, filename, storage, fileinfo');
         $this->db->from('file');
 
         $conditions = explode(",", $searchValue);
@@ -43,6 +43,7 @@ class Logfile_model extends CI_Model
         if ($searchValue != '') {
             $this->db->like('shopid', $searchValue);
             $this->db->or_like('deviceid', $searchValue);
+            $this->db->or_like('versaas', $searchValue);
             $this->db->or_like('applicationname', $searchValue);
             $this->db->or_like('timestamp', $searchValue);
             $this->db->or_like('filename', $searchValue);
@@ -69,7 +70,7 @@ class Logfile_model extends CI_Model
      */
     public function getLogfiles($start, $limit, $searchValue='')
     {
-        $this->db->select('id, shopid, deviceid, applicationname, timestamp, filename, storage, fileinfo');
+        $this->db->select('id, shopid, deviceid, versaas, applicationname, timestamp, filename, storage, fileinfo');
         $this->db->from('file');
 
         $conditions = explode(",", $searchValue);
@@ -86,6 +87,7 @@ class Logfile_model extends CI_Model
         if ($searchValue != '') {
             $this->db->like('shopid', $searchValue);
             $this->db->or_like('deviceid', $searchValue);
+            $this->db->or_like('versaas', $searchValue);
             $this->db->or_like('applicationname', $searchValue);
             $this->db->or_like('timestamp', $searchValue);
             $this->db->or_like('filename', $searchValue);

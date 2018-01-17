@@ -35,6 +35,7 @@ $(document).ready(function() {
             { data: 'id' },
             { data: 'shopid' },
             { data: 'deviceid' },
+            { data: 'versaas' },
             { data: 'applicationname' },
             { data: 'timestamp' },
             { data: 'filename' },
@@ -42,7 +43,7 @@ $(document).ready(function() {
             { data: 'fileinfo' },
         ],
         "columnDefs": [{
-             "targets" : 8,
+             "targets" : 9,
              "data" : null,
              "render" : function(data, type, row) {
                  var fn = data.fileinfo

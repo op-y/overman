@@ -44,7 +44,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="groupModalLabel"><span id="groupModalTitleName"></span>集团<span id="groupModalTitleID"></span>命中小流量信息</h4>
+                <h4 class="modal-title" id="groupModalLabel"><span id="groupModalTitleName"></span>集团<span id="groupModalTitleID"></span>小流量信息</h4>
             </div>
             <div id="groupModalBody" class="modal-body">
             </div>
