@@ -211,6 +211,20 @@ class Service extends MY_Controller
      */
     public function ajaxUpdate()
     {
+        $now = new DateTime();
+        $hour = $now->format('H');
+        $minute = $now->format('i');
+        $elapse = $hour * 60 + $minute;
+        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
+            $data = array(
+                'message'=>"高峰时间不让升级，有困难找OP",
+                'code'=>403,
+            );
+            $json = json_encode($data);
+            echo $json;
+            return;
+        }
+
         $serviceId    = $this->input->post('serviceId');
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
@@ -260,6 +274,20 @@ class Service extends MY_Controller
      */
     public function ajaxRollback()
     {
+        $now = new DateTime();
+        $hour = $now->format('H');
+        $minute = $now->format('i');
+        $elapse = $hour * 60 + $minute;
+        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
+            $data = array(
+                'message'=>"高峰时间不让升级，有困难找OP",
+                'code'=>403,
+            );
+            $json = json_encode($data);
+            echo $json;
+            return;
+        }
+
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
@@ -293,6 +321,20 @@ class Service extends MY_Controller
      */
     public function ajaxPause()
     {
+        $now = new DateTime();
+        $hour = $now->format('H');
+        $minute = $now->format('i');
+        $elapse = $hour * 60 + $minute;
+        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
+            $data = array(
+                'message'=>"高峰时间不让升级，有困难找OP",
+                'code'=>403,
+            );
+            $json = json_encode($data);
+            echo $json;
+            return;
+        }
+
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
@@ -325,6 +367,20 @@ class Service extends MY_Controller
      */
     public function ajaxResume()
     {
+        $now = new DateTime();
+        $hour = $now->format('H');
+        $minute = $now->format('i');
+        $elapse = $hour * 60 + $minute;
+        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
+            $data = array(
+                'message'=>"高峰时间不让升级，有困难找OP",
+                'code'=>403,
+            );
+            $json = json_encode($data);
+            echo $json;
+            return;
+        }
+
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
