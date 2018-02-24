@@ -280,7 +280,7 @@ class Service extends MY_Controller
         $elapse = $hour * 60 + $minute;
         if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
             $data = array(
-                'message'=>"高峰时间不让升级，有困难找OP",
+                'message'=>"高峰时间(11:00-13:30 16:00-20:00)不让升级，有困难找OP",
                 'code'=>403,
             );
             $json = json_encode($data);
