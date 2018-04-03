@@ -11,10 +11,10 @@ function changeService(id, name) {
         complete: function(){
         },
         success: function(data){
-            deployment = $.parseJSON(data);
-            refreshDeployment(id, name, deployment);
+            d = $.parseJSON(data);
+            refreshDeployment(id, name, d);
             
-            if (deployment.deployment == null || deployment.deployment == undefined || deployment.deployment == "") {
+            if (d.deployment == null || d.deployment == undefined || d.deployment == "") {
                 return;
             } else {
                 getImagesAfterDeployment(id, name);
@@ -32,8 +32,23 @@ function refreshTitle(name){
 
 function refreshDeployment(id, name, data){
     if(data.deployment == null) {
-        $("#deploymentAlertDiv").removeClass("hidden");
         $("#deploymentPanelDiv").addClass("hidden");
+        $("#deploymentAlertDiv").removeClass("hidden");
+        $("#deploymentBlockDiv").addClass("hidden");
+        $("#deploymentUpdateInfoDiv").addClass("hidden");
+        $("#deploymentRollbackInfoDiv").addClass("hidden");
+
+        $("#deployment_env").val("");
+        $("#deployment_idc").val("");
+        $("#deployment_registry").val("");
+        $("#deployment_module").val("");
+    } else if (data.blocking) {
+        $("#deploymentPanelDiv").addClass("hidden");
+        $("#deploymentAlertDiv").addClass("hidden");
+        $("#deploymentBlockDiv").removeClass("hidden");
+        $("#deploymentUpdateInfoDiv").addClass("hidden");
+        $("#deploymentRollbackInfoDiv").addClass("hidden");
+
         $("#deployment_env").val("");
         $("#deployment_idc").val("");
         $("#deployment_registry").val("");
@@ -43,8 +58,12 @@ function refreshDeployment(id, name, data){
         $("#deployment_idc").val(data.deployment.idc);
         $("#deployment_registry").val(data.deployment.imageRepoURL);
         $("#deployment_module").val(data.deployment.k8sServiceName);
+
         $("#deploymentPanelDiv").removeClass("hidden");
         $("#deploymentAlertDiv").addClass("hidden");
+        $("#deploymentBlockDiv").addClass("hidden");
+        $("#deploymentUpdateInfoDiv").removeClass("hidden");
+        $("#deploymentRollbackInfoDiv").removeClass("hidden");
     }
 }
 
@@ -115,10 +134,12 @@ $("#deploymentUpdate").click(function(){
         },
         success: function(data){
             result = $.parseJSON(data);
-            $("#backendCode").text(result.code);
-            switch(result.code) {
+            $("#backendCode").text(result.updateCode);
+            switch(result.updateCode) {
             case 201:
-                $("#backendMessage").text("开始升级!");break;
+                $("#backendCode").text("Update->"+result.updateCode+" THEN Pause->"+result.pauseCode);
+                $("#backendMessage").text("升级开始,当前暂停");
+                break;
             case 1011:
                 $("#backendMessage").text("找不到对应Namespace");break;
             case 1012:
@@ -270,10 +291,11 @@ $("#rollbackModalBtnOK").click(function(){
         },
         success: function(data){
             result = $.parseJSON(data);
-            $("#backendCode").text(result.code);
-            switch(result.code) {
+            $("#backendCode").text(result.rollbackCode);
+            switch(result.rollbackCode) {
             case 201:
-                $("#backendMessage").text("开始回滚!");break;
+                $("#backendMessage").text("已经继续,开始回滚!");
+                break;
             case 1011:
                 $("#backendMessage").text("找不到对应Namespace");break;
             case 1012:

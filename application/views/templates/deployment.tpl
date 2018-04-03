@@ -31,7 +31,11 @@
               <button type="button" class="btn btn-info" id="deploymentHistory">历史</button>
         </form>
     </div>
+    <br />
     <div class="alert alert-danger hidden" id="deploymentAlertDiv" role="alert">请在服务管理页面添加服务部署配置!</div>
+    <div class="alert alert-warning hidden" id="deploymentBlockDiv" role="alert">当前服务高峰期(上午11:00-13:30,下午16:00-20:00)禁止发版!</div>
+    <div class="alert alert-info hidden" id="deploymentUpdateInfoDiv" role="alert">注意:服务上线流程已经修改为默认暂停,即点击"升级"之后只会更新1-2个实例,请确认新启动实例正常之后点击"继续"完成升级操作!!!</div>
+    <div class="alert alert-info hidden" id="deploymentRollbackInfoDiv"  role="alert">提示:如果上线发生异常，请直接点击"回滚"</div>
 </div>
 
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">

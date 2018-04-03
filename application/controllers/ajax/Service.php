@@ -138,9 +138,32 @@ class Service extends MY_Controller
     {
         $id  = $this->input->post('id');
         $deployment = $this->service->getDeploymentByService($id);
-        $result = array(
-            "deployment"=>$deployment,
-        );
+
+        $blocking = false;
+        $now = new DateTime();
+        $hour = $now->format('H');
+        $minute = $now->format('i');
+        $elapse = $hour * 60 + $minute;
+        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
+            $blocking = true;
+        }
+
+        if ($deployment == null) {
+            $result = array(
+                "deployment"=>null,
+                "blocking"=>false,
+            );
+        } else if ($blocking && $deployment->status == "RESTRICT") {
+            $result = array(
+                "deployment"=>$deployment,
+                "blocking"=>true,
+            );
+        } else {
+            $result = array(
+                "deployment"=>$deployment,
+                "blocking"=>false,
+            );
+        }
         $json = json_encode($result);
         echo $json;
     }
@@ -211,26 +234,14 @@ class Service extends MY_Controller
      */
     public function ajaxUpdate()
     {
-        $now = new DateTime();
-        $hour = $now->format('H');
-        $minute = $now->format('i');
-        $elapse = $hour * 60 + $minute;
-        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
-            $data = array(
-                'message'=>"高峰时间不让升级，有困难找OP",
-                'code'=>403,
-            );
-            $json = json_encode($data);
-            echo $json;
-            return;
-        }
-
+        // post paramters
         $serviceId    = $this->input->post('serviceId');
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
         $imageTag     = $this->input->post('imageTag');
 
+        // user info
         $this->load->library('session');    
         $username = $this->session->userdata('username');
         $user = $this->user->getUserId($username);
@@ -240,6 +251,17 @@ class Service extends MY_Controller
 
         $this->config->load('app_deployment');
         $k8s = $this->config->item('deployment');
+
+        $this->load->helper('curl');
+
+        $data = array(
+            'updateMsg'=>"",
+            'updateCode'=>0,
+            'pauseMsg'=>"",
+            'pauseCode'=>0,
+        );
+
+        // update
         $method   = $k8s['k8sUpdate']['method'];
         $protocol = $k8s['k8sUpdate']['protocol'];
         $host     = $k8s['k8sUpdate']['host'];
@@ -247,22 +269,41 @@ class Service extends MY_Controller
         $uri      = $k8s['k8sUpdate']['uri'];
 
         $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&image_id=".$imageTag;
-        $this->load->helper('curl');
         $result = curl_call($url, $method, null, null);
-        $resultObj = json_decode($result);
+        $updateResultObj = json_decode($result);
 
-        if ("201" == $resultObj->code) {
+        if ("201" == $updateResultObj->code) {
             $this->service->addDeployLog($timestamp, $userId, $serviceId, $imageTag, 60, "SUCC");
-        } elseif ("1015" == $resultObj->code) {
+
+            // sleep 3 seconds then pause
+            sleep(3);
+
+            $method   = $k8s['k8sPause']['method'];
+            $protocol = $k8s['k8sPause']['protocol'];
+            $host     = $k8s['k8sPause']['host'];
+            $port     = $k8s['k8sPause']['port'];
+            $uri      = $k8s['k8sPause']['uri'];
+            $pause    = $k8s['k8sPause']['params']['pause'];
+
+            $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&pause=".$pause;
+            $result = curl_call($url, $method, null, null);
+            $pauseResultObj = json_decode($result);
+
+            $data['updateMsg'] = $updateResultObj->message;
+            $data['updateCode'] = $updateResultObj->code;
+            $data['pauseMsg'] = $pauseResultObj->message;
+            $data['pauseCode'] = $pauseResultObj->code;
+        } elseif ("1015" == $updateResultObj->code) {
             $this->service->addDeployLog($timestamp, $userId, $serviceId, $imageTag, 60, "KEEP");
+            $data['updateMsg'] = $updateResultObj->message;
+            $data['updateCode'] = $updateResultObj->code;
         } else {
             $this->service->addDeployLog($timestamp, $userId, $serviceId, $imageTag, 60, "FAIL");
+            $data['updateMsg'] = $updateResultObj->message;
+            $data['updateCode'] = $updateResultObj->code;
         }
 
-        $data = array(
-            'message'=>$resultObj->message,
-            'code'=>$resultObj->code,
-        );
+        // return JSON data
         $json = json_encode($data);
         echo $json;
     }
@@ -274,26 +315,36 @@ class Service extends MY_Controller
      */
     public function ajaxRollback()
     {
-        $now = new DateTime();
-        $hour = $now->format('H');
-        $minute = $now->format('i');
-        $elapse = $hour * 60 + $minute;
-        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
-            $data = array(
-                'message'=>"高峰时间(11:00-13:30 16:00-20:00)不让升级，有困难找OP",
-                'code'=>403,
-            );
-            $json = json_encode($data);
-            echo $json;
-            return;
-        }
-
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
 
         $this->config->load('app_deployment');
         $k8s = $this->config->item('deployment');
+        $this->load->helper('curl');
+
+        $data = array(
+            'resumeMsg'=>"",
+            'resumeCode'=>0,
+            'rollbackMsg'=>"",
+            'rollbackCode'=>0,
+        );
+
+        // resume
+        $method   = $k8s['k8sResume']['method'];
+        $protocol = $k8s['k8sResume']['protocol'];
+        $host     = $k8s['k8sResume']['host'];
+        $port     = $k8s['k8sResume']['port'];
+        $uri      = $k8s['k8sResume']['uri'];
+        $pause    = $k8s['k8sResume']['params']['pause'];
+
+        $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&pause=".$pause;
+        $result = curl_call($url, $method, null, null);
+        $resumeResultObj = json_decode($result);
+
+        // sleep 3 seconds then rollback
+        sleep(3);
+
         $method   = $k8s['k8sRollback']['method'];
         $protocol = $k8s['k8sRollback']['protocol'];
         $host     = $k8s['k8sRollback']['host'];
@@ -302,14 +353,13 @@ class Service extends MY_Controller
         $rollback = $k8s['k8sRollback']['params']['rollback'];
 
         $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&rollback=".$rollback;
-        $this->load->helper('curl');
         $result = curl_call($url, $method, null, null);
-        $resultObj = json_decode($result);
+        $rollbackResultObj = json_decode($result);
 
-        $data = array(
-            'message'=>$resultObj->message,
-            'code'=>$resultObj->code,
-        );
+        $data['resumeMsg'] = $resumeResultObj->message;
+        $data['resumeCode'] = $resumeResultObj->code;
+        $data['rollbackMsg'] = $rollbackResultObj->message;
+        $data['rollbackCode'] = $rollbackResultObj->code;
         $json = json_encode($data);
         echo $json;
     }
@@ -321,20 +371,6 @@ class Service extends MY_Controller
      */
     public function ajaxPause()
     {
-        $now = new DateTime();
-        $hour = $now->format('H');
-        $minute = $now->format('i');
-        $elapse = $hour * 60 + $minute;
-        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
-            $data = array(
-                'message'=>"高峰时间不让升级，有困难找OP",
-                'code'=>403,
-            );
-            $json = json_encode($data);
-            echo $json;
-            return;
-        }
-
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
@@ -367,20 +403,6 @@ class Service extends MY_Controller
      */
     public function ajaxResume()
     {
-        $now = new DateTime();
-        $hour = $now->format('H');
-        $minute = $now->format('i');
-        $elapse = $hour * 60 + $minute;
-        if ((660 < $elapse && 810 > $elapse) || (960 < $elapse && 1200 > $elapse)) {
-            $data = array(
-                'message'=>"高峰时间不让升级，有困难找OP",
-                'code'=>403,
-            );
-            $json = json_encode($data);
-            echo $json;
-            return;
-        }
-
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
