@@ -39,7 +39,7 @@
 </div>
 
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -47,7 +47,7 @@
             </div>
             <div class="modal-body" id="updateModalBody">
                 <p>后端状态:<span id="backendCode"></span></p>
-                <p>后端消息:<span id="backendMessage"></span></p>
+                <h2>后端消息:<span id="backendMessage"></span></h2>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="updateModalBtnOK">知道了</button>

@@ -131,6 +131,7 @@
                                 <option value="www">线上(www)</option>
                                 <option value="mis">内部线(mis)</option>
                                 <option value="caidanmao">彩蛋猫(caidanmao)</option>
+                                <option value="dingduoduo">订多多(dingduoduo)</option>
                             </select>
                         </div>
                         <div class="form-group">

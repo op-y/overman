@@ -137,8 +137,8 @@ $("#deploymentUpdate").click(function(){
             $("#backendCode").text(result.updateCode);
             switch(result.updateCode) {
             case 201:
-                $("#backendCode").text("Update->"+result.updateCode+" THEN Pause->"+result.pauseCode);
-                $("#backendMessage").text("升级开始,当前暂停");
+                $("#backendCode").text("开始升级："+result.updateCode+" 然后 暂停："+result.pauseCode);
+                $("#backendMessage").text("升级开始了，系统更新一个实例后暂停升级，你去机器上检查日志和效果，确认正常后一定要回来点一下[继续]！如果苗头不对，回来点[回滚]！");
                 break;
             case 1011:
                 $("#backendMessage").text("找不到对应Namespace");break;
@@ -151,7 +151,7 @@ $("#deploymentUpdate").click(function(){
             case 1015:
                 $("#backendMessage").text("当前版本和升级版本一致");break;
             default:
-                $("#backendMessage").text(result.message);break;
+                $("#backendMessage").text(result.updateMsg);break;
             }
             $("#updateModal").modal("toggle");
         },
@@ -294,7 +294,7 @@ $("#rollbackModalBtnOK").click(function(){
             $("#backendCode").text(result.rollbackCode);
             switch(result.rollbackCode) {
             case 201:
-                $("#backendMessage").text("已经继续,开始回滚!");
+                $("#backendMessage").text("状态调整为继续，并且已经开始回滚!");
                 break;
             case 1011:
                 $("#backendMessage").text("找不到对应Namespace");break;
@@ -307,7 +307,7 @@ $("#rollbackModalBtnOK").click(function(){
             case 1015:
                 $("#backendMessage").text("当前版本和升级版本一致");break;
             default:
-                $("#backendMessage").text(result.message);break;
+                $("#backendMessage").text(result.rollbackMsg);break;
             }
             $("#updateModal").modal("toggle");
         },
