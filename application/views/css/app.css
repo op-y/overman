@@ -7,13 +7,6 @@ body {
     text-align: center;
 }
 
-.app-op-box {
-    margin: 1px;
-    padding: 10px 10px 10px 10px;
-    border-style: dashed;
-    border-width: 1px;
-}
-
 .app-form {
     padding: 50px 100px 50px 100px;
 }
@@ -48,6 +41,11 @@ body {
     width: 28px;
     height: 28px;
     border-radius: 50%;
+}
+
+.img-loading {
+    width: 18px;
+    height: 18px;
 }
 
 .profile-box {

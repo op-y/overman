@@ -34,11 +34,7 @@ var currentId, currentName;
 
 // Click Event
 function beforeClick(treeId, treeNode, clickFlag){
-    alert("before click: " +
-            treeId + ", " + 
-            treeNode.tId + ", " + 
-            treeNode.name + ", " + 
-            treeNode.parentTId);
+    return true;
 }
 
 function onClick(event, treeId, treeNode) {

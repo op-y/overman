@@ -12,7 +12,7 @@
             <span class="label label-default" id="grayAvaliableSpan"></span>&nbsp;
             <span class="label label-default" id="grayBadSpan"></span>&nbsp;
             <span class="label label-default" id="grapUpdateSpan"></span>&nbsp;
-            <img src="/application/views/image/loading.gif" class="img-circle hidden" id="grayLoadingImg" alt="Loading">
+            <img src="/application/views/image/loading.gif" class="img-loading hidden" id="grayLoadingImg" alt="Loading">
         </p>
     </div>
     <br />
@@ -27,7 +27,7 @@
             <span class="label label-success" id="onlineAvaliableSpan"></span>&nbsp;
             <span class="label label-danger" id="onlineBadSpan"></span>&nbsp;
             <span class="label label-warning" id="onlineUpdateSpan"></span>&nbsp;
-            <img src="/application/views/image/loading.gif" class="img-circle hidden" id="onlineLoadingImg" alt="Loading">
+            <img src="/application/views/image/loading.gif" class="img-loading hidden" id="onlineLoadingImg" alt="Loading">
         </p>
     </div>
     <br />

@@ -183,7 +183,7 @@ function refreshImages(id, name, data) {
 
 $("#msgModalBtnOK").click(function(){
     $("#msgModal").modal("toggle");
-})
+});
 
 $("#abUpdate").click(function(){
     var serviceId = currentId;
@@ -425,8 +425,7 @@ $("#rollbackModalBtnOK").click(function(){
             $("#backendCode").text(result.rollbackCode);
             switch(result.rollbackCode) {
             case 201:
-                $("#backendMessage").text("状态调整为继续，并且已经开始回滚!");
-                break;
+                $("#backendMessage").text("状态调整为继续，并且已经开始回滚!");break;
             case 1011:
                 $("#backendMessage").text("找不到对应Namespace");break;
             case 1012:
