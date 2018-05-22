@@ -1,5 +1,11 @@
+var onlineTimer = null;
+var grayTimer = null;
+
 function changeService(id, name) {
+    clearInterval(onlineTimer);
+    clearInterval(grayTimer);
     refreshTitle(name);
+    refreshStatus();
 
     $.ajax({ 
         type:"POST",
@@ -21,7 +27,10 @@ function changeService(id, name) {
             }
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
 }
@@ -30,9 +39,32 @@ function refreshTitle(name){
     $("#srvTitle").text(name);
 }
 
+function refreshStatus(){
+    $('#grayImageSpan').text("nil");
+    $('#grayStatusSpan').text("nil");
+    $('#grayExpectSpan').text("nil");
+    $('#grayCurrentSpan').text("nil");
+    $('#grayAvaliableSpan').text("nil");
+    $('#grayBadSpan').text("nil");
+    $('#grayUpdateSpan').text("nil");
+
+    $('#onlineImageSpan').text("nil");
+    $('#onlineStatusSpan').text("nil");
+    $('#onlineExpectSpan').text("nil");
+    $('#onlineCurrentSpan').text("nil");
+    $('#onlineAvaliableSpan').text("nil");
+    $('#onlineBadSpan').text("nil");
+    $('#onlineUpdateSpan').text("nil");
+}
+
 function refreshDeployment(id, name, data){
     if(data.deployment == null) {
         $("#deploymentPanelDiv").addClass("hidden");
+        $("#grayStatusDiv").addClass("hidden");
+        $("#onlineStatusDiv").addClass("hidden");
+        $("#AbOpDiv").addClass("hidden");
+        $("#abStart").attr("href", "#");
+        $("#abStop").attr("href", "#");
         $("#deploymentAlertDiv").removeClass("hidden");
         $("#deploymentBlockDiv").addClass("hidden");
         $("#deploymentUpdateInfoDiv").addClass("hidden");
@@ -42,8 +74,14 @@ function refreshDeployment(id, name, data){
         $("#deployment_idc").val("");
         $("#deployment_registry").val("");
         $("#deployment_module").val("");
+
     } else if (data.blocking) {
         $("#deploymentPanelDiv").addClass("hidden");
+        $("#grayStatusDiv").addClass("hidden");
+        $("#onlineStatusDiv").addClass("hidden");
+        $("#AbOpDiv").addClass("hidden");
+        $("#abStart").attr("href", "#");
+        $("#abStop").attr("href", "#");
         $("#deploymentAlertDiv").addClass("hidden");
         $("#deploymentBlockDiv").removeClass("hidden");
         $("#deploymentUpdateInfoDiv").addClass("hidden");
@@ -53,6 +91,25 @@ function refreshDeployment(id, name, data){
         $("#deployment_idc").val("");
         $("#deployment_registry").val("");
         $("#deployment_module").val("");
+
+    } else if (data.deployment.grayEnabled == 0) {
+        $("#deployment_env").val(data.deployment.namespace);
+        $("#deployment_idc").val(data.deployment.idc);
+        $("#deployment_registry").val(data.deployment.imageRepoURL);
+        $("#deployment_module").val(data.deployment.k8sServiceName);
+
+        $("#deploymentPanelDiv").removeClass("hidden");
+        $("#grayStatusDiv").addClass("hidden");
+        $("#onlineStatusDiv").removeClass("hidden");
+        $("#AbOpDiv").addClass("hidden");
+        $("#abStart").attr("href", "#");
+        $("#abStop").attr("href", "#");
+        $("#deploymentAlertDiv").addClass("hidden");
+        $("#deploymentBlockDiv").addClass("hidden");
+        $("#deploymentUpdateInfoDiv").removeClass("hidden");
+        $("#deploymentRollbackInfoDiv").removeClass("hidden");
+
+       onlineTimer = setInterval(getOnlineStatus, 6000);
     } else {
         $("#deployment_env").val(data.deployment.namespace);
         $("#deployment_idc").val(data.deployment.idc);
@@ -60,10 +117,18 @@ function refreshDeployment(id, name, data){
         $("#deployment_module").val(data.deployment.k8sServiceName);
 
         $("#deploymentPanelDiv").removeClass("hidden");
+        $("#grayStatusDiv").removeClass("hidden");
+        $("#onlineStatusDiv").removeClass("hidden");
+        $("#AbOpDiv").removeClass("hidden");
+        $("#abStart").attr("href", "http://172.16.0.50:9878/setGray?serviceName="+data.deployment.k8sServiceName);
+        $("#abStop").attr("href", "http://172.16.0.50:9878/Service_finishGray?serviceName="+data.deployment.k8sServiceName);
         $("#deploymentAlertDiv").addClass("hidden");
         $("#deploymentBlockDiv").addClass("hidden");
         $("#deploymentUpdateInfoDiv").removeClass("hidden");
         $("#deploymentRollbackInfoDiv").removeClass("hidden");
+
+        onlineTimer = setInterval(getOnlineStatus, 6000);
+        grayTimer = setInterval(getGrayStatus, 6000);
     }
 }
 
@@ -82,7 +147,10 @@ function getImagesAfterDeployment(id, name) {
             refreshImages(id, name, imageInfo);
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
 }
@@ -90,12 +158,14 @@ function getImagesAfterDeployment(id, name) {
 function refreshImages(id, name, data) {
     if (0 == data.tags.length) {
         $("#ImageDiv").empty();
+
         var label=$('<label for="deployment_imageTag">镜像Tag:</label>');
         var input=$('<input type="text" class="form-control" id="deployment_imageTag" placeholder="Image Tag">');
         $("#ImageDiv").append(label);
         $("#ImageDiv").append(input);
     } else {
         $("#ImageDiv").empty();
+
         var label=$('<label for="deployment_imageTag">镜像Tag:</label>');
         var selector=$('<select class="form-control" id="deployment_imageTag"></select>');
         $.each(data.tags, function(i, tag){
@@ -110,6 +180,58 @@ function refreshImages(id, name, data) {
         $("deployment_imageTag").val(firstValue);
     }
 }
+
+$("#msgModalBtnOK").click(function(){
+    $("#msgModal").modal("toggle");
+})
+
+$("#abUpdate").click(function(){
+    var serviceId = currentId;
+    var env      = $("#deployment_env").val();
+    var idc      = $("#deployment_idc").val();
+    var module   = $("#deployment_module").val() + "-gray";
+    var imageTag = $("#deployment_imageTag").val();
+    $(this).attr("disabled",true); 
+    $.ajax({ 
+        type:"POST",
+        url:"./ajaxGrayUpdate", 
+        context: document.body, 
+        data:{serviceId:serviceId, env:env, idc:idc, module:module, imageTag:imageTag},
+        datatype: "json",
+        beforeSend:function(){
+        },
+        complete: function(){
+        },
+        success: function(data){
+            result = $.parseJSON(data);
+            $("#backendCode").text(result.updateCode);
+            switch(result.updateCode) {
+            case 201:
+                $("#backendMessage").text("灰度部署升级开始");break;
+            case 1011:
+                $("#backendMessage").text("找不到对应灰度部署的Namespace");break;
+            case 1012:
+                $("#backendMessage").text("找不到对应灰度部署Deployment");break;
+            case 1013:
+                $("#backendMessage").text("找不到对应Image");break;
+            case 1014:
+                $("#backendMessage").text("找不到对应Container");break;
+            case 1015:
+                $("#backendMessage").text("灰度部署当前版本和升级版本一致");break;
+            default:
+                $("#backendMessage").text(result.updateMsg);break;
+            }
+            $("#updateModal").modal("toggle");
+        },
+        error: function(){
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
+        }         
+    });
+    $(this).attr("disabled",false); 
+});
 
 /*
  * update and show update result modal
@@ -156,7 +278,10 @@ $("#deploymentUpdate").click(function(){
             $("#updateModal").modal("toggle");
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
     $(this).attr("disabled",false); 
@@ -201,7 +326,10 @@ $("#deploymentPause").click(function(){
             $("#updateModal").modal("toggle");
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
     $(this).attr("disabled",false); 
@@ -246,7 +374,10 @@ $("#deploymentResume").click(function(){
             $("#updateModal").modal("toggle");
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
     $(this).attr("disabled",false); 
@@ -312,7 +443,10 @@ $("#rollbackModalBtnOK").click(function(){
             $("#updateModal").modal("toggle");
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
     $(this).attr("disabled",false); 
@@ -325,80 +459,75 @@ $("#rollbackModalBtnClose").click(function(){
     $("#rollbackModal").modal("toggle");
 });
 
+
 /*
- * show status modal
+ * show reboot modal
  */
-$("#deploymentStatus").click(function(){
-    $("#statusModal").modal("toggle");
+$("#deploymentReboot").click(function(){
+    $("#rebootModal").modal("toggle");
 });
 
-$("#statusModalBtnClose").click(function(){
-    $("#statusModal").modal("toggle");
-});
+/*
+ * reboot
+ */
+$("#rebootModalBtnOK").click(function(){
+    $("#rebootModal").modal("toggle");
 
-var timer = null;
-$('#statusModal').on('show.bs.modal',function() {
-    timer = setInterval(getStatus, 6000);
-});
+    var serviceId = currentId;
+    var env      = $("#deployment_env").val();
+    var idc      = $("#deployment_idc").val();
+    var module   = $("#deployment_module").val();
 
-$('#statusModal').on('hide.bs.modal',function() {
-    clearInterval(timer);
-    $("#statusModalBody p").remove();
-});
-
-
-function getStatus(){
-    var env    = $("#deployment_env").val();
-    var idc    = $("#deployment_idc").val();
-    var module = $("#deployment_module").val();
-
+    $(this).attr("disabled",true); 
     $.ajax({ 
         type:"POST",
-        url:"./ajaxGetDeploymentStatus", 
+        url:"./ajaxReboot", 
         context: document.body, 
-        data:{circumstance:env, idc:idc, serviceName:module},
+        data:{serviceId:serviceId, env:env, idc:idc, module:module},
         datatype: "json",
         beforeSend:function(){
         },
         complete: function(){
         },
         success: function(data){
-            stat = $.parseJSON(data);
-            appendStatus(stat);
+            result = $.parseJSON(data);
+            $("#backendCode").text(result.code);
+            switch(result.code) {
+            case 200:
+                $("#backendMessage").text("正在重启中...");
+                break;
+            case 1011:
+                $("#backendMessage").text("找不到对应Namespace");break;
+            case 1012:
+                $("#backendMessage").text("找不到对应Deployment");break;
+            case 1013:
+                $("#backendMessage").text("找不到对应Image");break;
+            case 1014:
+                $("#backendMessage").text("找不到对应Container");break;
+            case 1015:
+                $("#backendMessage").text("当前版本和升级版本一致");break;
+            default:
+                $("#backendMessage").text("未知状态");break;
+            }
+            $("#updateModal").modal("toggle");
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
-}
+    $(this).attr("disabled",false); 
+});
 
-function appendStatus(stat) {
-    var imageTag = "";
-    $.each(stat.pod, function(key, value){
-        imageTag = value.split(":")[1];
-    });
+/*
+ * close reboot modal
+ */
+$("#rebootModalBtnClose").click(function(){
+    $("#rebootModal").modal("toggle");
+});
 
-    var updateStatus = "";
-    if (stat.message.paused) {
-        updateStatus = "已暂停...";
-    } else if (stat.message.current == stat.message.expected && stat.message.available == stat.message.expected) {
-        updateStatus = "已完成";
-    } else {
-        updateStatus = "进行中...";
-    }
-
-    var deployparam=$('<p>'
-            +'<span class="label label-primary">最终镜像:'+imageTag+'</span>&nbsp;'
-            +'<span class="label label-info">状态:'+ updateStatus +'</span>&nbsp;'
-            +'<span class="label label-primary">期待POD:'+stat.message.expected+'</span>&nbsp;'
-            +'<span class="label label-primary">当前POD:'+stat.message.current+'</span>&nbsp;'
-            +'<span class="label label-success">生效POD:'+stat.message.available+'</span>&nbsp;'
-            +'<span class="label label-danger">失效POD:'+stat.message.unavailable+'</span>&nbsp;'
-            +'<span class="label label-warning">更新POD:'+stat.message.update+'</span>&nbsp;'
-            +'</p>');
-
-    $("#statusModalBody").append(deployparam);
-}
 
 /*
  * show history modal
@@ -423,7 +552,10 @@ $("#deploymentHistory").click(function(){
             showHistory(info);
         },
         error: function(){
-            alert("AJAX错误!");
+            $("#msgModalBody").empty();
+            var para=$('<p>"AJAX错误!</p>');
+            $("#msgModalBody").append(para);
+            $("#msgModal").modal("toggle");
         }         
     });
 });
@@ -444,6 +576,10 @@ function showHistory(info) {
                 var badgeDiv = $('<div class="timeline-badge success"><i class="glyphicon glyphicon-ok"></i></div>');
             } else if ("FAIL" == record.status) {
                 var badgeDiv = $('<div class="timeline-badge danger"><i class="glyphicon glyphicon-remove-sign"></i></div>');
+            } else if ("BACK" == record.status) {
+                var badgeDiv = $('<div class="timeline-badge warning"><i class="glyphicon glyphicon-arrow-left"></i></div>');
+            } else if ("BOOT" == record.status) {
+                var badgeDiv = $('<div class="timeline-badge warning"><i class="glyphicon glyphicon-refresh"></i></div>');
             } else {
                 var badgeDiv = $('<div class="timeline-badge info"><i class="glyphicon glyphicon-repeat"></i></div>');
             }
@@ -461,7 +597,7 @@ function showHistory(info) {
 
             bodyDiv.append(bodyParamUser);
             bodyDiv.append(bodyParamTag);
-            bodyDiv.append(bodyParamDuration);
+            //bodyDiv.append(bodyParamDuration);
 
             pannelDiv.append(headingDiv);
             pannelDiv.append(bodyDiv);
@@ -479,3 +615,116 @@ function showHistory(info) {
 $("#historyModalBtnClose").click(function(){
     $("#historyModal").modal("toggle");
 });
+
+// timer
+function getOnlineStatus(){
+    var env    = $("#deployment_env").val();
+    var idc    = $("#deployment_idc").val();
+    var module = $("#deployment_module").val();
+
+    $.ajax({ 
+        type:"POST",
+        url:"./ajaxGetDeploymentStatus", 
+        context: document.body, 
+        data:{circumstance:env, idc:idc, serviceName:module},
+        datatype: "json",
+        beforeSend:function(){
+            $("#onlineLoadingImg").removeClass("hidden");
+        },
+        complete: function(){
+            $("#onlineLoadingImg").addClass("hidden");
+        },
+        success: function(data){
+            stat = $.parseJSON(data);
+            changeOnlineStatus(stat);
+        },
+        error: function(){
+            console.log("AJAX Error: 获取线上部署状态失败")
+        }         
+    });
+}
+
+function changeOnlineStatus(stat) {
+    var imageTag = "";
+
+    if (stat.code != 200) {
+        return;
+    }
+
+    $.each(stat.pod, function(key, value){
+        imageTag = value.split(":")[1];
+    });
+
+    var updateStatus = "";
+    if (stat.message.paused) {
+        updateStatus = "已暂停...";
+    } else if (stat.message.current == stat.message.expected && stat.message.available == stat.message.expected) {
+        updateStatus = "已完成";
+    } else {
+        updateStatus = "进行中...";
+    }
+
+    $('#onlineImageSpan').text("最终镜像:" + imageTag);
+    $('#onlineStatusSpan').text("状态:" + updateStatus);
+    $('#onlineExpectSpan').text("期待POD:" + stat.message.expected);
+    $('#onlineCurrentSpan').text("当前POD:" + stat.message.current);
+    $('#onlineAvaliableSpan').text("生效POD:" + stat.message.available);
+    $('#onlineBadSpan').text("失效POD:" + stat.message.unavailable);
+    $('#onlineUpdateSpan').text("更新POD:" + stat.message.update);
+}
+
+function getGrayStatus(){
+    var env    = $("#deployment_env").val();
+    var idc    = $("#deployment_idc").val();
+    var module = $("#deployment_module").val() + "-gray";
+
+    $.ajax({ 
+        type:"POST",
+        url:"./ajaxGetDeploymentStatus", 
+        context: document.body, 
+        data:{circumstance:env, idc:idc, serviceName:module},
+        datatype: "json",
+        beforeSend:function(){
+            $("#grayLoadingImg").removeClass("hidden");
+        },
+        complete: function(){
+            $("#grayLoadingImg").addClass("hidden");
+        },
+        success: function(data){
+            stat = $.parseJSON(data);
+            changeGrayStatus(stat);
+        },
+        error: function(){
+            console.log("AJAX Error: 获取灰度部署状态失败")
+        }         
+    });
+}
+
+function changeGrayStatus(stat) {
+    var imageTag = "";
+
+    if (stat.code != 200) {
+        return;
+    }
+
+    $.each(stat.pod, function(key, value){
+        imageTag = value.split(":")[1];
+    });
+
+    var updateStatus = "";
+    if (stat.message.paused) {
+        updateStatus = "已暂停...";
+    } else if (stat.message.current == stat.message.expected && stat.message.available == stat.message.expected) {
+        updateStatus = "已完成";
+    } else {
+        updateStatus = "进行中...";
+    }
+
+    $('#grayImageSpan').text("最终镜像:" + imageTag);
+    $('#grayStatusSpan').text("状态:" + updateStatus);
+    $('#grayExpectSpan').text("期待POD:" + stat.message.expected);
+    $('#grayCurrentSpan').text("当前POD:" + stat.message.current);
+    $('#grayAvaliableSpan').text("生效POD:" + stat.message.available);
+    $('#grayBadSpan').text("失效POD:" + stat.message.unavailable);
+    $('#grayUpdateSpan').text("更新POD:" + stat.message.update);
+}

@@ -86,6 +86,7 @@ function refreshDeploymentConfig(id, name, data){
     if(data.deployment == null) {
         $("#srvDeploymentEnv").text("no configuration");
         $("#srvDeploymentIDC").text("no configuration");
+        $("#srvDeploymentGray").text("no configuration");
         $("#srvDeploymentJenkinsName").text("no configuration");
         $("#srvDeploymentGitRepoUrl").text("no configuration");
         $("#srvDeploymentGitBranch").text("no configuration");
@@ -100,6 +101,7 @@ function refreshDeploymentConfig(id, name, data){
         $("#deployModalServiceId").val(id);
         $("#deployModalFieldEnv").val("");
         $("#deployModalFieldIDC").val("");
+        $("#deployModalFieldGray").val("");
         $("#deployModalFieldJenkinsName").val("");
         $("#deployModalFieldGitRepoUrl").val("");
         $("#deployModalFieldGitBranch").val("");
@@ -112,6 +114,11 @@ function refreshDeploymentConfig(id, name, data){
     } else {
         $("#srvDeploymentEnv").text(data.deployment.namespace);
         $("#srvDeploymentIDC").text(data.deployment.idc);
+        if (data.deployment.grayEnabled == 1) {
+            $("#srvDeploymentGray").text("开启");
+        } else {
+            $("#srvDeploymentGray").text("关闭");
+        }
         $("#srvDeploymentJenkinsName").text(data.deployment.jenkinsJobName);
         $("#srvDeploymentGitRepoUrl").text(data.deployment.jenkinsRepoURL);
         $("#srvDeploymentGitBranch").text(data.deployment.jenkinsRepoBranch);
@@ -126,6 +133,7 @@ function refreshDeploymentConfig(id, name, data){
         $("#deployModalServiceId").val(id);
         $("#deployModalFieldEnv").val(data.deployment.namespace);
         $("#deployModalFieldIDC").val(data.deployment.idc);
+        $("#deployModalFieldGray").val(data.deployment.grayEnabled);
         $("#deployModalFieldJenkinsName").val(data.deployment.jenkinsJobName);
         $("#deployModalFieldGitRepoUrl").val(data.deployment.jenkinsRepoURL);
         $("#deployModalFieldGitBranch").val(data.deployment.jenkinsRepoBranch);
@@ -157,7 +165,6 @@ $("#srvBtnDeploy").click(function(){
     $("#deployModal").modal("toggle");
 });
 
-// add service
 function clear() {
     $("#srvModalFieldPid").val(currentId);
     $("#srvModalFieldPname").val(currentName);
@@ -275,6 +282,7 @@ function updateDeployment() {
     var valueServiceId = $("#deployModalServiceId").val();
     var valueEnv = $("#deployModalFieldEnv").val();
     var valueIDC = $("#deployModalFieldIDC").val();
+    var valueGray = $("#deployModalFieldGray").val();
     var valueJenkinName = $("#deployModalFieldJenkinsName").val();
     var valueGitRepoUrl = $("#deployModalFieldGitRepoUrl").val();
     var valueGitBranch = $("#deployModalFieldGitBranch").val();
@@ -288,7 +296,7 @@ function updateDeployment() {
     $.ajax({ 
         type:"POST",
         url:"./ajaxConfigDeployment", 
-        data:{id:valueId, serviceid:valueServiceId, namespace:valueEnv, idc:valueIDC, jenkinsJobName:valueJenkinName, jenkinsRepoURL:valueGitRepoUrl, jenkinsRepoBranch:valueGitBranch, jenkinsMavenParam:valueCompileParam, jenkinsJarPath:valueJarPath, jenkinsRunParam:valueRunParam, imageRepoURL:valueImageRepoUrl, k8sServiceName:valueK8sName, k8sServicePort:valueK8sPort},
+        data:{id:valueId, serviceid:valueServiceId, namespace:valueEnv, idc:valueIDC, gray:valueGray, jenkinsJobName:valueJenkinName, jenkinsRepoURL:valueGitRepoUrl, jenkinsRepoBranch:valueGitBranch, jenkinsMavenParam:valueCompileParam, jenkinsJarPath:valueJarPath, jenkinsRunParam:valueRunParam, imageRepoURL:valueImageRepoUrl, k8sServiceName:valueK8sName, k8sServicePort:valueK8sPort},
         datatype: "json",
         beforeSend:function(){
         },

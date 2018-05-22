@@ -73,5 +73,17 @@ $config['deployment'] = array(
             'pause'=>'false',
         ),
     ),
+    'k8sReboot'=>array(
+        'method'=>'PUT',
+        'protocol'=>'http',
+        'host'=>'test.com',
+        'port'=>80,
+        'uri'=>'/pod/restart',
+        'params' => array(
+            'service_name'=>'',
+            'circumstance'=>'',
+            'idc'=>'',
+        ),
+    ),
 );
 

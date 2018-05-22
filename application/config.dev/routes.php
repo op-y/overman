@@ -60,8 +60,11 @@ $route['app123'] = 'app123/index';
 
 /* AB test */
 $route['ab']                = 'page/ab/index';
+$route['abGroups/(:any)']   = 'page/ab/groups/$1';
+$route['abOp']              = 'page/ab/ops';
 $route['ajaxGetABTest']     = 'ajax/ab/ajaxGetABTest';
 $route['ajaxGetTestGroups'] = 'ajax/ab/ajaxGetTestGroups';
+$route['ajaxDoABOp']        = 'ajax/ab/ajaxDoABOp';
 
 /* Log File */
 $route['logfile']        = 'page/logfile/index';
@@ -101,10 +104,12 @@ $route['ajaxUpdateService'] = 'ajax/service/ajaxUpdateService';
 $route['ajaxDeleteService'] = 'ajax/service/ajaxDeleteService';
 
 $route['deployment']               = 'page/service/deployment';
+$route['ajaxGrayUpdate']           = 'ajax/service/ajaxGrayUpdate';
 $route['ajaxUpdate']               = 'ajax/service/ajaxUpdate';
 $route['ajaxPause']                = 'ajax/service/ajaxPause';
 $route['ajaxResume']               = 'ajax/service/ajaxResume';
 $route['ajaxRollback']             = 'ajax/service/ajaxRollback';
+$route['ajaxReboot']               = 'ajax/service/ajaxReboot';
 $route['ajaxGetDeployment']        = 'ajax/service/ajaxGetDeployment';
 $route['ajaxGetDeploymentStatus']  = 'ajax/service/ajaxGetDeploymentStatus';
 $route['ajaxGetDeploymentHistory'] = 'ajax/service/ajaxGetDeploymentHistory';

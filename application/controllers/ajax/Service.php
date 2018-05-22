@@ -178,6 +178,7 @@ class Service extends MY_Controller
         $serviceId         = $this->input->post('serviceid');
         $namespace         = $this->input->post('namespace');
         $idc               = $this->input->post('idc');
+        $gray              = $this->input->post('gray');
         $jenkinsJobName    = $this->input->post('jenkinsJobName');
         $jenkinsRepoURL    = $this->input->post('jenkinsRepoURL');
         $jenkinsRepoBranch = $this->input->post('jenkinsRepoBranch');
@@ -193,6 +194,7 @@ class Service extends MY_Controller
             $serviceId, 
             $namespace, 
             $idc, 
+            $gray, 
             $jenkinsJobName, 
             $jenkinsRepoURL, 
             $jenkinsRepoBranch, 
@@ -224,6 +226,61 @@ class Service extends MY_Controller
             "history"=>$history,
         );
         $json = json_encode($result);
+        echo $json;
+    }
+
+    /**
+     * Process AJAX request: POST /index.php/ajaxGrayUpdate
+     *
+     * @return json
+     */
+    public function ajaxGrayUpdate()
+    {
+        // post paramters
+        $serviceId    = $this->input->post('serviceId');
+        $circumstance = $this->input->post('env');
+        $idc          = $this->input->post('idc');
+        $serviceName  = $this->input->post('module');
+        $imageTag     = $this->input->post('imageTag');
+
+        // user info
+        $this->load->library('session');    
+        $username = $this->session->userdata('username');
+        $user = $this->user->getUserId($username);
+        $userId = $user->userId;
+
+        $timestamp = date("Y-m-d H:i:s",time());
+
+        $this->config->load('app_deployment');
+        $k8s = $this->config->item('deployment');
+
+        $this->load->helper('curl');
+
+        $data = array(
+            'updateMsg'=>"",
+            'updateCode'=>0,
+            'pauseMsg'=>"",
+            'pauseCode'=>0,
+        );
+
+        // update
+        $method   = $k8s['k8sUpdate']['method'];
+        $protocol = $k8s['k8sUpdate']['protocol'];
+        $host     = $k8s['k8sUpdate']['host'];
+        $port     = $k8s['k8sUpdate']['port'];
+        $uri      = $k8s['k8sUpdate']['uri'];
+
+        $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&image_id=".$imageTag;
+        $result = curl_call($url, $method, null, null);
+        $updateResultObj = json_decode($result);
+
+        $data['updateMsg'] = $updateResultObj->message;
+        $data['updateCode'] = $updateResultObj->code;
+        $data['pauseMsg'] = 'skip';
+        $data['pauseCode'] = '000';
+
+        // return JSON data
+        $json = json_encode($data);
         echo $json;
     }
 
@@ -315,9 +372,19 @@ class Service extends MY_Controller
      */
     public function ajaxRollback()
     {
+        $serviceId    = $this->input->post('serviceId');
         $circumstance = $this->input->post('env');
         $idc          = $this->input->post('idc');
         $serviceName  = $this->input->post('module');
+
+        // user info
+        $this->load->library('session');    
+        $username = $this->session->userdata('username');
+        $user = $this->user->getUserId($username);
+        $userId = $user->userId;
+
+        // operate time
+        $timestamp = date("Y-m-d H:i:s",time());
 
         $this->config->load('app_deployment');
         $k8s = $this->config->item('deployment');
@@ -355,6 +422,9 @@ class Service extends MY_Controller
         $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName."&rollback=".$rollback;
         $result = curl_call($url, $method, null, null);
         $rollbackResultObj = json_decode($result);
+
+        // keep op history
+        $this->service->addDeployLog($timestamp, $userId, $serviceId, "last version", 60, "BACK");
 
         $data['resumeMsg'] = $resumeResultObj->message;
         $data['resumeCode'] = $resumeResultObj->code;
@@ -424,6 +494,50 @@ class Service extends MY_Controller
             'message'=>$resultObj->message,
             'code'=>$resultObj->code,
         );
+        $json = json_encode($data);
+        echo $json;
+    }
+
+    /**
+     * Process AJAX request: POST /index.php/ajaxReboot
+     *
+     * @return json
+     */
+    public function ajaxReboot()
+    {
+        $serviceId    = $this->input->post('serviceId');
+        $serviceName  = $this->input->post('module');
+        $circumstance = $this->input->post('env');
+        $idc          = $this->input->post('idc');
+
+        // user info
+        $this->load->library('session');    
+        $username = $this->session->userdata('username');
+        $user = $this->user->getUserId($username);
+        $userId = $user->userId;
+
+        $timestamp = date("Y-m-d H:i:s",time());
+
+        $this->config->load('app_deployment');
+        $k8s = $this->config->item('deployment');
+        $method   = $k8s['k8sReboot']['method'];
+        $protocol = $k8s['k8sReboot']['protocol'];
+        $host     = $k8s['k8sReboot']['host'];
+        $port     = $k8s['k8sReboot']['port'];
+        $uri      = $k8s['k8sReboot']['uri'];
+
+        $url = $protocol."://".$host.":".$port.$uri."?circumstance=".$circumstance."&idc=".$idc."&service_name=".$serviceName;
+        $this->load->helper('curl');
+        $result = curl_call($url, $method, null, null);
+        $resultObj = json_decode($result);
+        $data = array(
+            'code'=>$resultObj->code,
+            'message'=>$resultObj->message,
+        );
+
+        // keep op history
+        $this->service->addDeployLog($timestamp, $userId, $serviceId, "current version", 60, "BOOT");
+
         $json = json_encode($data);
         echo $json;
     }

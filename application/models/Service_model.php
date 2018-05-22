@@ -126,7 +126,7 @@ class Service_model extends CI_Model
      */
     public function getDeploymentByService($id)
     {
-        $this->db->select('service_deployment.id as id, service_deployment.service_id as serviceId, service_deployment.namespace as namespace, service_deployment.idc as idc, service_deployment.jenkins_job_name as jenkinsJobName, service_deployment.jenkins_repo_url as jenkinsRepoURL, service_deployment.jenkins_repo_branch as jenkinsRepoBranch, service_deployment.jenkins_maven_param as jenkinsMavenParam, service_deployment.jenkins_jar_path as jenkinsJarPath, service_deployment.jenkins_run_param as jenkinsRunParam, service_deployment.image_repo_url as imageRepoURL, service_deployment.k8s_service_name as k8sServiceName, service_deployment.k8s_service_port as k8sServicePort, service_deployment.status as status');
+        $this->db->select('service_deployment.id as id, service_deployment.service_id as serviceId, service_deployment.namespace as namespace, service_deployment.idc as idc, service_deployment.gray_enabled as grayEnabled, service_deployment.jenkins_job_name as jenkinsJobName, service_deployment.jenkins_repo_url as jenkinsRepoURL, service_deployment.jenkins_repo_branch as jenkinsRepoBranch, service_deployment.jenkins_maven_param as jenkinsMavenParam, service_deployment.jenkins_jar_path as jenkinsJarPath, service_deployment.jenkins_run_param as jenkinsRunParam, service_deployment.image_repo_url as imageRepoURL, service_deployment.k8s_service_name as k8sServiceName, service_deployment.k8s_service_port as k8sServicePort, service_deployment.status as status');
         $this->db->from('service_deployment');
         $this->db->where('service_deployment.service_id', $id);
         $query = $this->db->get();
@@ -146,6 +146,7 @@ class Service_model extends CI_Model
         $serviceId, 
         $namespace, 
         $idc, 
+        $gray, 
         $jenkinsJobName, 
         $jenkinsRepoURL, 
         $jenkinsRepoBranch, 
@@ -162,6 +163,7 @@ class Service_model extends CI_Model
             'service_id'=>$serviceId,
             'namespace'=>$namespace,
             'idc'=>$idc,
+            'gray_enabled'=>$gray,
             'jenkins_job_name'=>$jenkinsJobName,
             'jenkins_repo_url'=>$jenkinsRepoURL,
             'jenkins_repo_branch'=>$jenkinsRepoBranch,

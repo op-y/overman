@@ -47,6 +47,7 @@
            <dl class="dl-horizontal">
                <dt>部署环境</dt><dd><span id="srvDeploymentEnv"><span></dd>
                <dt>部署机房</dt><dd><span id="srvDeploymentIDC"><span></dd>
+               <dt>开启灰度</dt><dd><span id="srvDeploymentGray"><span></dd>
                <dt>Jenkins任务名</dt><dd><span id="srvDeploymentJenkinsName"></span></dd>
                <dt>Git项目路径</dt><dd><span id="srvDeploymentGitRepoUrl"></span></dd>
                <dt>Git代码分支</dt><dd><span id="srvDeploymentGitBranch"></span></dd>
@@ -57,13 +58,6 @@
                <dt>Kubernetes部署名</dt><dd><span id="srvDeploymentK8sName"></span></dd>
                <dt>Kubernetes服务端口</dt><dd><span id="srvDeploymentK8sPort"></span></dd>
            </dl>
-        </div>
-    </div>
-
-    <div class="panel panel-primary">
-        <div class="panel-heading">当前部署配置</div>
-        <div class="panel-body">
-            Endpoints
         </div>
     </div>
 
@@ -137,6 +131,13 @@
                         <div class="form-group">
                             <label for="deployModalFieldIDC">Deployment IDC:</label>
                             <select class="form-control" id="deployModalFieldIDC">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deployModalFieldGray">Gray Enabled:</label>
+                            <select class="form-control" id="deployModalFieldGray">
+                                <option value="0">关闭</option>
+                                <option value="1">开启</option>
                             </select>
                         </div>
                         <div class="form-group">
