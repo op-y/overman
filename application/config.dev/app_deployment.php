@@ -85,5 +85,16 @@ $config['deployment'] = array(
             'idc'=>'',
         ),
     ),
+    'provider'=>array(
+        'method'=>'POST',
+        'protocol'=>'http',
+        'host'=>'127.0.0.1',
+        'port'=>8080,
+        'uri'=>'/alarm',
+        'params' => array(
+            'tos'=>'18888888888',
+            'content'=>'',
+        ),
+    ),
 );
 

@@ -316,6 +316,7 @@ class Service extends MY_Controller
             'updateCode'=>0,
             'pauseMsg'=>"",
             'pauseCode'=>0,
+            'wechat'=>null,
         );
 
         // update
@@ -350,6 +351,21 @@ class Service extends MY_Controller
             $data['updateCode'] = $updateResultObj->code;
             $data['pauseMsg'] = $pauseResultObj->message;
             $data['pauseCode'] = $pauseResultObj->code;
+
+            // alarm
+            $method   = $k8s['provider']['method'];
+            $protocol = $k8s['provider']['protocol'];
+            $host     = $k8s['provider']['host'];
+            $port     = $k8s['provider']['port'];
+            $uri      = $k8s['provider']['uri'];
+            $tos      = $k8s['provider']['params']['tos'];
+            $content  = "大家好，我是 ".$username.", 我在升级 ".$idc." 机房的 ".$serviceName."[".$imageTag."], 出了问题来打我，谢谢!";
+            
+            $url = $protocol."://".$host.":".$port.$uri;
+            $alarm = "tos=".$tos."&content=".$content;
+            $result = curl_call($url, $method, $alarm, null);
+            $data['wechat'] = $result;
+
         } elseif ("1015" == $updateResultObj->code) {
             $this->service->addDeployLog($timestamp, $userId, $serviceId, $imageTag, 60, "KEEP");
             $data['updateMsg'] = $updateResultObj->message;
@@ -395,6 +411,7 @@ class Service extends MY_Controller
             'resumeCode'=>0,
             'rollbackMsg'=>"",
             'rollbackCode'=>0,
+            'wechat'=>null,
         );
 
         // resume
@@ -426,6 +443,21 @@ class Service extends MY_Controller
         // keep op history
         $this->service->addDeployLog($timestamp, $userId, $serviceId, "last version", 60, "BACK");
 
+        // alarm
+        $method   = $k8s['provider']['method'];
+        $protocol = $k8s['provider']['protocol'];
+        $host     = $k8s['provider']['host'];
+        $port     = $k8s['provider']['port'];
+        $uri      = $k8s['provider']['uri'];
+        $tos      = $k8s['provider']['params']['tos'];
+        $content  = "大家好，我是 ".$username.", 我把 ".$idc." 机房的 ".$serviceName." 回滚了，出了问题来打我，谢谢!";
+        
+        $url = $protocol."://".$host.":".$port.$uri;
+        $alarm = "tos=".$tos."&content=".$content;
+        $result = curl_call($url, $method, $alarm, null);
+        $data['wechat'] = $result;
+
+        // return JSON data
         $data['resumeMsg'] = $resumeResultObj->message;
         $data['resumeCode'] = $resumeResultObj->code;
         $data['rollbackMsg'] = $rollbackResultObj->message;
